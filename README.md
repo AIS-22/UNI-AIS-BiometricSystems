@@ -2,7 +2,7 @@
 
 ## Dataset & Structure
 
-The dataset is avaiable [here]. The expanded dataset should be just put under the `data` directory. This way the directory structure should look like this:
+The dataset is available [here]. The expanded dataset should be just put under the `data` directory. This way the directory structure should look like this:
 
 ```
 data
