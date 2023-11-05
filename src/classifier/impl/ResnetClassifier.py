@@ -7,7 +7,7 @@ from sklearn.metrics import precision_recall_fscore_support
 from torch.nn.modules.loss import Module
 from torchvision.models.resnet import ResNet
 
-from src.AbstractClassifier import AbstractClassifier
+from src.classifier.AbstractClassifier import AbstractClassifier
 
 
 def _get_device() -> str:

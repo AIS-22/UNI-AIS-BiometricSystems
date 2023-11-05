@@ -4,8 +4,8 @@ In this file we will train a pretrained CNN with the PLUS dataset.
 from torch import nn
 from torchvision import models
 
-from src.PlusDataLoader import PlusDataLoader
-from src.ResnetClassifier import ResnetClassifier
+from src.data_loader.impl.PlusDataLoader import PlusDataLoader
+from src.classifier.impl.ResnetClassifier import ResnetClassifier
 from src.VeinImageType import VeinImageType
 
 
