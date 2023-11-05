@@ -2,10 +2,9 @@ from typing import Tuple
 
 import numpy as np
 import torch
-import torch.nn as nn
+from torch import nn, optim
 from sklearn.metrics import precision_recall_fscore_support
 from torch.nn.modules.loss import Module
-from torch.optim.optimizer import Optimizer
 from torchvision.models.resnet import ResNet
 
 from src.AbstractClassifier import AbstractClassifier
@@ -28,7 +27,6 @@ class ResnetClassifier(AbstractClassifier):
                  model_name: str,
                  model: ResNet,
                  loss_function: Module,
-                 optimizer: Optimizer,
                  num_image_channels: int,
                  num_inputs_nodes: Tuple[int, int] = (736, 192),
                  num_output_nodes: int = 2,
@@ -41,7 +39,7 @@ class ResnetClassifier(AbstractClassifier):
         self.model_name = model_name
         self.model = model
         self.criterion = loss_function
-        self.optimizer = optimizer
+        self.optimizer = None
         self.num_image_channels = num_image_channels
         self.should_save_model = should_save_model
 
@@ -54,6 +52,8 @@ class ResnetClassifier(AbstractClassifier):
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
         self.model.to(device)
+
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
         losses = np.zeros((self.num_epochs, 2))
         for epoch in range(self.num_epochs):
@@ -97,8 +97,7 @@ class ResnetClassifier(AbstractClassifier):
         print('Model trained and losses saved')
 
         if self.should_save_model:
-            torch.save(self.model.state_dict(), "models/cnnParams_" + self.model_name + ".pt")
-            print("Model saved")
+            self.save_model()
 
     def evaluate(self, val_loader):
         device = _get_device()
