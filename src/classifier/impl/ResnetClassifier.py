@@ -71,7 +71,7 @@ class ResnetClassifier(AbstractClassifier):
 
                 running_loss += loss.item() * images.size(0)
 
-            epoch_loss = running_loss / len(train_loader.dataset.samples)
+            epoch_loss = running_loss / len(train_loader.dataset.indices)
             print(f'Train Epoch: {epoch + 1}, Loss: {epoch_loss:.4f}')
 
             self.model.eval()
@@ -89,7 +89,7 @@ class ResnetClassifier(AbstractClassifier):
                     correct += (predicted == labels).sum().item()
 
             accuracy = correct / total
-            test_loss /= len(val_loader.dataset.samples)
+            test_loss /= len(val_loader.dataset.indices)
             print(f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
             losses[epoch, 0] = epoch_loss
             losses[epoch, 1] = test_loss
@@ -107,6 +107,7 @@ class ResnetClassifier(AbstractClassifier):
         total = 0
         all_preds = []
         all_labels = []
+        confusion_matrix = np.zeros((2, 2))
 
         with torch.no_grad():
             for images, labels in val_loader:
@@ -116,6 +117,9 @@ class ResnetClassifier(AbstractClassifier):
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)  # Update the total count of processed samples
                 correct += (predicted == labels).sum().item()
+
+                for t, p in zip(labels.view(-1), predicted.view(-1)):
+                    confusion_matrix[t.long(), p.long()] += 1
 
                 all_preds.extend(predicted.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
@@ -128,7 +132,8 @@ class ResnetClassifier(AbstractClassifier):
         print(f'Recall: {recall:.4f}')
         print(f'F1-score: {f1_score:.4f}')
 
-        np.save('results/' + self.model_name + '_results.npy', accuracy)
+        np.save('results/' + self.model_name + '_accuracy_results.npy', accuracy)
+        np.save('results/' + self.model_name + '_conf_matrix_results.npy', confusion_matrix)
 
     def save_model(self):
         torch.save(self.model.state_dict(), "models/cnnParams_" + self.model_name + ".pt")

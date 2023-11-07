@@ -7,7 +7,7 @@ from torchvision import models
 from src.data_loader.impl.PlusDataLoader import PlusDataLoader
 from src.classifier.impl.ResnetClassifier import ResnetClassifier
 from src.VeinImageType import VeinImageType
-
+import torch
 
 def main():
     """
@@ -22,7 +22,7 @@ def main():
                              model_name='resnet18_gen_spoof',
                              model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
                              loss_function=nn.CrossEntropyLoss(),
-                             num_image_channels=1)
+                             num_image_channels=3)
     model.train(train_loader, test_loader)
     model.evaluate(test_loader)
 

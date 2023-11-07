@@ -19,11 +19,19 @@ class AbstractDataLoader(ABC):
     def load_data(self,
                   batch_size: int,
                   use_image_types: List[VeinImageType],
-                  transform=transforms.ToTensor) -> tuple[DataLoader, DataLoader]:
+                  transform=transforms.ToTensor()) -> tuple[DataLoader, DataLoader]:
         self._create_dataset(transform, use_image_types)
-        assert self.__train_set is not None and self.__test_set is not None
+        #assert self.__train_set is not None and self.__test_set is not None
 
         train_loader = DataLoader(self.__train_set, batch_size=batch_size, shuffle=True)
         test_loader = DataLoader(self.__test_set, batch_size=batch_size, shuffle=False)
 
         return train_loader, test_loader
+
+    def set_train_set(self, train_set):
+        self.__train_set = train_set
+
+    def set_test_set(self, test_set):
+        self.__test_set = test_set
+
+
