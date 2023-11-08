@@ -13,14 +13,14 @@ class AbstractDataLoader(ABC):
         self.__test_set = None
 
     @abstractmethod
-    def __create_dataset(self, transform, use_image_types: List[VeinImageType]) -> None:
+    def _create_dataset(self, transform, use_image_types: List[VeinImageType]) -> None:
         pass
 
     def load_data(self,
                   batch_size: int,
                   use_image_types: List[VeinImageType],
                   transform=transforms.ToTensor) -> tuple[DataLoader, DataLoader]:
-        self.__create_dataset(transform, use_image_types)
+        self._create_dataset(transform, use_image_types)
         assert self.__train_set is not None and self.__test_set is not None
 
         train_loader = DataLoader(self.__train_set, batch_size=batch_size, shuffle=True)
