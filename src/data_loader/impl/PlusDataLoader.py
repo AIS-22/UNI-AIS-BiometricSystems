@@ -1,16 +1,18 @@
-from typing import List
+import random
+from typing import List, Any
 
 import torchvision
+from torch.utils.data import Subset
+from torchvision.transforms import transforms
 
-from torch.utils.data import Subset, random_split
-import random
 from src.VeinImageType import VeinImageType
 from src.data_loader.AbstractDataLoader import AbstractDataLoader
 
 
 def checkPath(full_path, image_path):
     if 'synthethic' in full_path:
-        return full_path in image_path and '/003/' in image_path and '/004/' and ('/5_rs/' not in image_path or '/all_rs/' not in image_path or '/evaluation/' not in image_path)
+        return full_path in image_path and '/003/' in image_path and '/004/' and (
+                '/5_rs/' not in image_path or '/all_rs/' not in image_path or '/evaluation/' not in image_path)
     else:
         return full_path in image_path
 
@@ -20,7 +22,7 @@ class PlusDataLoader(AbstractDataLoader):
     def __init__(self):
         super().__init__()
 
-    def _create_dataset(self, transform, use_image_types: List[VeinImageType]) -> None:
+    def load_data(self, use_image_types: List[VeinImageType], transform=transforms.ToTensor()) -> Subset[Any]:
 
         root_path = 'data/PLUS/'
         # Load the entire dataset
@@ -38,7 +40,7 @@ class PlusDataLoader(AbstractDataLoader):
         # Calculate counts for train and test
         train_count = int(0.8 * amount)
 
-        indexes_train = []
+        all_indexes = []
         indexes_test = []
         for i in range(0, len(indexes_list)):
             # shorter each class to the smallest amount
@@ -48,15 +50,11 @@ class PlusDataLoader(AbstractDataLoader):
             random.shuffle(indexes_list[i])
 
             # Combine all indexes
-            indexes_train += indexes_list[i][:train_count]
-            indexes_test += indexes_list[i][train_count:]
+            all_indexes += indexes_list[i]
 
-        # Shuffle train and test
-        random.shuffle(indexes_train)
-        random.shuffle(indexes_test)
+        # Shuffle indexes
+        random.shuffle(all_indexes)
 
-        # train test split
-        train_dataset = Subset(full_dataset, indexes_train)
-        test_dataset = Subset(full_dataset, indexes_test)
-        self.set_train_set(train_dataset)
-        self.set_test_set(test_dataset)
+        # Get filtered dataset
+        dataset = Subset(full_dataset, all_indexes)
+        return dataset

@@ -1,11 +1,14 @@
-from typing import List
+from typing import List, Any
 
-from src.data_loader.AbstractDataLoader import AbstractDataLoader
+from torch.utils.data import Subset
+from torchvision.transforms import transforms
+
 from src.VeinImageType import VeinImageType
+from src.data_loader.AbstractDataLoader import AbstractDataLoader
 
 
 class VeraDataLoader(AbstractDataLoader):
 
-    def _create_dataset(self, transform, use_image_types: List[VeinImageType]) -> None:
+    def load_data(self, use_image_types: List[VeinImageType], transform=transforms.ToTensor()) -> Subset[Any]:
         # TODO: Set __train_set and __test_set here!
         return None

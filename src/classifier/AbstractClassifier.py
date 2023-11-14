@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class AbstractClassifier(ABC):
     @abstractmethod
-    def train(self, X, y) -> None:
+    def train(self, X) -> None:
         pass
 
     @abstractmethod

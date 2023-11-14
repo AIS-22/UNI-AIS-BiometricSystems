@@ -2,9 +2,11 @@ from typing import Tuple
 
 import numpy as np
 import torch
-from torch import nn, optim
 from sklearn.metrics import precision_recall_fscore_support
+from sklearn.model_selection import KFold
+from torch import nn, optim
 from torch.nn.modules.loss import Module
+from torch.utils.data import DataLoader, Subset
 from torchvision.models.resnet import ResNet
 
 from src.classifier.AbstractClassifier import AbstractClassifier
@@ -28,9 +30,11 @@ class ResnetClassifier(AbstractClassifier):
                  model: ResNet,
                  loss_function: Module,
                  num_image_channels: int,
+                 batch_size: int,
+                 folds: int,
                  num_inputs_nodes: Tuple[int, int] = (736, 192),
-                 num_output_nodes: int = 2,
-                 should_save_model: bool = True):
+                 num_output_nodes: int = 2
+                 ) -> object:
 
         self.num_inputs_nodes = num_inputs_nodes
         self.num_output_nodes = num_output_nodes
@@ -41,19 +45,46 @@ class ResnetClassifier(AbstractClassifier):
         self.criterion = loss_function
         self.optimizer = None
         self.num_image_channels = num_image_channels
-        self.should_save_model = should_save_model
+        self.validation_loss = []
+        self.accuracy = []
+        self.confusion_matrix = []
+        self.folds = folds
+        self.batch_size = batch_size
+        self.device = _get_device()
 
-    def train(self, train_loader, val_loader):
-        device = _get_device()
+    def train(self, dataset):
+        # Create a KFold object
+        kfold = KFold(n_splits=self.folds, shuffle=True, random_state=42)
+
+        # Get the total length of your dataset
+        dataset_length = len(dataset)
 
         # This should change the input conv layer, maybe there is no need for defining the new image sizes
         self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
-        self.model.to(device)
+        self.model.to(self.device)
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
+
+        # Iterate over the folds
+        for fold, (train_idx, test_idx) in enumerate(kfold.split(range(dataset_length))):
+            print('-----------------------------------------------------------------------')
+            print(f"Fold {fold + 1}:")
+
+            # Create train and validation subsets
+            train_set = Subset(dataset, train_idx)
+            test_set = Subset(dataset, test_idx)
+
+            # Create DataLoader for training and validation
+            train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
+            test_loader = DataLoader(test_set, batch_size=self.batch_size, shuffle=False)
+
+            self.train_fold(train_loader, test_loader)
+            self.evaluate(test_loader)
+
+    def train_fold(self, train_loader, val_loader):
 
         losses = np.zeros((self.num_epochs, 2))
         for epoch in range(self.num_epochs):
@@ -61,7 +92,7 @@ class ResnetClassifier(AbstractClassifier):
             self.model.train()
             running_loss = 0.0
             for images, labels in train_loader:
-                images, labels = images.to(device), labels.to(device)
+                images, labels = images.to(self.device), labels.to(self.device)
 
                 self.optimizer.zero_grad()
                 outputs = self.model(images)
@@ -80,7 +111,7 @@ class ResnetClassifier(AbstractClassifier):
             test_loss = 0
             with torch.no_grad():
                 for images, labels in val_loader:
-                    images, labels = images.to(device), labels.to(device)
+                    images, labels = images.to(self.device), labels.to(self.device)
 
                     outputs = self.model(images)
                     _, predicted = torch.max(outputs.data, 1)
@@ -93,15 +124,11 @@ class ResnetClassifier(AbstractClassifier):
             print(f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
             losses[epoch, 0] = epoch_loss
             losses[epoch, 1] = test_loss
-        np.save('results/losses_' + self.model_name + '.npy', losses)
-        print('Model trained and losses saved')
 
-        if self.should_save_model:
-            self.save_model()
+        self.validation_loss.append(losses)
 
     def evaluate(self, val_loader):
-        device = _get_device()
-        self.model.to(device)
+        self.model.to(self.device)
         self.model.eval()
         correct = 0
         total = 0
@@ -111,7 +138,7 @@ class ResnetClassifier(AbstractClassifier):
 
         with torch.no_grad():
             for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
+                images, labels = images.to(self.device), labels.to(self.device)
 
                 outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
@@ -132,8 +159,8 @@ class ResnetClassifier(AbstractClassifier):
         print(f'Recall: {recall:.4f}')
         print(f'F1-score: {f1_score:.4f}')
 
-        np.save('results/' + self.model_name + '_accuracy_results.npy', accuracy)
-        np.save('results/' + self.model_name + '_conf_matrix_results.npy', confusion_matrix)
+        self.accuracy.append(accuracy)
+        self.confusion_matrix.append(confusion_matrix)
 
     def save_model(self):
         torch.save(self.model.state_dict(), "models/cnnParams_" + self.model_name + ".pt")
@@ -142,3 +169,29 @@ class ResnetClassifier(AbstractClassifier):
     def load_model(self, model_path):
         self.model.load_state_dict(torch.load(model_path))
         print("Model loaded")
+
+    def save_losses(self):
+        losses = np.zeros((self.num_epochs, 2))
+        # Add up losses of each fold run
+        for loss in self.validation_loss:
+            losses += loss
+
+        # Get average
+        losses /= self.folds
+
+        np.save('results/losses_' + self.model_name + '.npy', losses)
+        print('Losses saved')
+
+    def save_accuracy(self):
+        acc = np.average(self.accuracy)
+        np.save('results/' + self.model_name + '_accuracy.npy', acc)
+        print('Accuracy saved')
+
+    def save_confusion_matrix(self):
+        conf_matrix = np.zeros((2, 2))
+        # Add up losses of each fold run
+        for conf_element in self.confusion_matrix:
+            conf_matrix += conf_element
+
+        np.save('results/' + self.model_name + '_conf_matrix.npy', conf_matrix)
+        print('Confusion matrix saved')
