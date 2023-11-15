@@ -10,5 +10,5 @@ from src.VeinImageType import VeinImageType
 class AbstractDataLoader(ABC):
 
     @abstractmethod
-    def load_data(self, use_image_types: List[VeinImageType], transform=transforms.ToTensor()) -> Subset[Any]:
+    def load_data(self, use_image_types: List[VeinImageType], datasetName, transform=transforms.ToTensor(), folder="") -> Subset[Any]:
         pass

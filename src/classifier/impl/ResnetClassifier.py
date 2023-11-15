@@ -27,6 +27,7 @@ class ResnetClassifier(AbstractClassifier):
                  num_epochs: int,
                  learning_rate: float,
                  model_name: str,
+                 dataset_name: str,
                  model: ResNet,
                  loss_function: Module,
                  num_image_channels: int,
@@ -41,6 +42,7 @@ class ResnetClassifier(AbstractClassifier):
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
         self.model_name = model_name
+        self.dataset_name = dataset_name
         self.model = model
         self.criterion = loss_function
         self.optimizer = None
@@ -163,7 +165,7 @@ class ResnetClassifier(AbstractClassifier):
         self.confusion_matrix.append(confusion_matrix)
 
     def save_model(self):
-        torch.save(self.model.state_dict(), "models/cnnParams_" + self.model_name + ".pt")
+        torch.save(self.model.state_dict(), "models/"+self.dataset_name +"/cnnParams_" + self.model_name + ".pt")
         print("Model saved")
 
     def load_model(self, model_path):
@@ -179,12 +181,12 @@ class ResnetClassifier(AbstractClassifier):
         # Get average
         losses /= self.folds
 
-        np.save('results/losses_' + self.model_name + '.npy', losses)
+        np.save('results/'+self.dataset_name +'/losses_' + self.model_name + '.npy', losses)
         print('Losses saved')
 
     def save_accuracy(self):
         acc = np.average(self.accuracy)
-        np.save('results/' + self.model_name + '_accuracy.npy', acc)
+        np.save('results/' + self.dataset_name + '/accuracy_' + self.model_name + '.npy', acc)
         print('Accuracy saved')
 
     def save_confusion_matrix(self):
@@ -193,5 +195,5 @@ class ResnetClassifier(AbstractClassifier):
         for conf_element in self.confusion_matrix:
             conf_matrix += conf_element
 
-        np.save('results/' + self.model_name + '_conf_matrix.npy', conf_matrix)
+        np.save('results/' + self.dataset_name + '/conf_matrix_' + self.model_name + '.npy', conf_matrix)
         print('Confusion matrix saved')
