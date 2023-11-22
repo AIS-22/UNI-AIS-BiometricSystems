@@ -20,7 +20,8 @@ def main():
     model = ResnetClassifier(num_epochs=10,
                              learning_rate=0.001,
                              model_name='resnet18_gen_spoof',
-                             model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
+                             model=models.resnet18(
+                                 weights=models.ResNet18_Weights.DEFAULT),
                              loss_function=nn.CrossEntropyLoss(),
                              num_image_channels=1)
     model.train(train_loader, test_loader)

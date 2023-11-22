@@ -23,7 +23,9 @@ class AbstractDataLoader(ABC):
         self._create_dataset(transform, use_image_types)
         assert self.__train_set is not None and self.__test_set is not None
 
-        train_loader = DataLoader(self.__train_set, batch_size=batch_size, shuffle=True)
-        test_loader = DataLoader(self.__test_set, batch_size=batch_size, shuffle=False)
+        train_loader = DataLoader(
+            self.__train_set, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(
+            self.__test_set, batch_size=batch_size, shuffle=False)
 
         return train_loader, test_loader

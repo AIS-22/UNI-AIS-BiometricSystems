@@ -47,13 +47,15 @@ class ResnetClassifier(AbstractClassifier):
         device = _get_device()
 
         # This should change the input conv layer, maybe there is no need for defining the new image sizes
-        self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.model.conv1 = nn.Conv2d(
+            self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
         self.model.to(device)
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.Adam(
+            self.model.parameters(), lr=self.learning_rate)
 
         losses = np.zeros((self.num_epochs, 2))
         for epoch in range(self.num_epochs):
@@ -84,13 +86,16 @@ class ResnetClassifier(AbstractClassifier):
 
                     outputs = self.model(images)
                     _, predicted = torch.max(outputs.data, 1)
-                    total += labels.size(0)  # Update the total count of processed samples
-                    test_loss += self.criterion(outputs, labels).item() * images.size(0)
+                    # Update the total count of processed samples
+                    total += labels.size(0)
+                    test_loss += self.criterion(outputs,
+                                                labels).item() * images.size(0)
                     correct += (predicted == labels).sum().item()
 
             accuracy = correct / total
             test_loss /= len(val_loader.dataset.samples)
-            print(f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
+            print(
+                f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
             losses[epoch, 0] = epoch_loss
             losses[epoch, 1] = test_loss
         np.save('results/losses_' + self.model_name + '.npy', losses)
@@ -114,14 +119,16 @@ class ResnetClassifier(AbstractClassifier):
 
                 outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)  # Update the total count of processed samples
+                # Update the total count of processed samples
+                total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
                 all_preds.extend(predicted.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
 
         accuracy = correct / total
-        precision, recall, f1_score, _ = precision_recall_fscore_support(all_labels, all_preds, average='weighted')
+        precision, recall, f1_score, _ = precision_recall_fscore_support(
+            all_labels, all_preds, average='weighted')
 
         print(f'Accuracy: {accuracy:.4f}')
         print(f'Precision: {precision:.4f}')
@@ -131,7 +138,8 @@ class ResnetClassifier(AbstractClassifier):
         np.save('results/' + self.model_name + '_results.npy', accuracy)
 
     def save_model(self):
-        torch.save(self.model.state_dict(), "models/cnnParams_" + self.model_name + ".pt")
+        torch.save(self.model.state_dict(),
+                   "models/cnnParams_" + self.model_name + ".pt")
         print("Model saved")
 
     def load_model(self, model_path):
