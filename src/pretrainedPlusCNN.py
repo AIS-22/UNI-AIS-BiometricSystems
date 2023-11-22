@@ -14,8 +14,8 @@ def main():
     This gives an example how to use the pretrained CNN with the PLUS dataset. With just the genuine and spoofed data.
     """
     data_loader = PlusDataLoader()
-    train_loader, test_loader = data_loader.load_data(batch_size=16,
-                                                      use_image_types=[VeinImageType.GENUINE, VeinImageType.SPOOFED])
+    train_loader, test_loader = data_loader.load_data(
+        batch_size=16, use_image_types=[VeinImageType.GENUINE, VeinImageType.SPOOFED])
 
     model = ResnetClassifier(num_epochs=10,
                              learning_rate=0.001,
