@@ -19,7 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pycodestyle
-    - name: Analysing the code with pycodestyle
+        pip install pep8-naming
+        pip install flake8
+    - name: Analysing the code with flake8
       run: |
-        pycodestyle $(git ls-files '*.py') --max-line-length=120
+        flake8 $(git ls-files '*.py') --max-line-length=120
