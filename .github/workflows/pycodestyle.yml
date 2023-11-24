@@ -21,6 +21,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pep8-naming
         pip install flake8
-    - name: Analysing the code with pycodestyle
+    - name: Analysing the code with flake8
       run: |
         flake8 $(git ls-files '*.py') --max-line-length=120
