@@ -84,9 +84,8 @@ class ResnetClassifier(AbstractClassifier):
             test_loader = DataLoader(test_set, batch_size=self.batch_size, shuffle=False)
 
             self.train_fold(train_loader, test_loader)
-            self.evaluate(test_loader)
 
-    def train_fold(self, train_loader, val_loader):
+    def train_fold(self, train_loader, test_loader):
 
         losses = np.zeros((self.num_epochs, 2))
         for epoch in range(self.num_epochs):
@@ -112,7 +111,7 @@ class ResnetClassifier(AbstractClassifier):
             total = 0
             test_loss = 0
             with torch.no_grad():
-                for images, labels in val_loader:
+                for images, labels in test_loader:
                     images, labels = images.to(self.device), labels.to(self.device)
 
                     outputs = self.model(images)
@@ -122,7 +121,7 @@ class ResnetClassifier(AbstractClassifier):
                     correct += (predicted == labels).sum().item()
 
             accuracy = correct / total
-            test_loss /= len(val_loader.dataset.indices)
+            test_loss /= len(test_loader.dataset.indices)
             print(f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
             losses[epoch, 0] = epoch_loss
             losses[epoch, 1] = test_loss

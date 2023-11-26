@@ -8,15 +8,6 @@ from torchvision.transforms import transforms
 from src.VeinImageType import VeinImageType
 from src.data_loader.AbstractDataLoader import AbstractDataLoader
 
-
-def checkPath(full_path, image_path, folder):
-    if 'synthethic' in full_path:
-        return full_path in image_path and folder in image_path and (
-                '/5_rs/' not in image_path or '/all_rs/' not in image_path or '/evaluation/' not in image_path)
-    else:
-        return full_path in image_path
-
-
 class PlusDataLoader(AbstractDataLoader):
 
     def __init__(self):
@@ -27,11 +18,10 @@ class PlusDataLoader(AbstractDataLoader):
         root_path = 'data/' + datasetName + '/'
         # Load the entire dataset
         full_dataset = torchvision.datasets.ImageFolder(root=root_path, transform=transform)
-
         indexes_list = []
         for i, path in enumerate(use_image_types):
-            full_path = root_path + path.value + '/'
-            indexes = [i for i, (image_path, _) in enumerate(full_dataset.samples) if checkPath(full_path, image_path, folder)]
+            full_path = root_path + path.value + "_" + folder + '/' if "synthethic" in path.value else root_path + path.value + '/'
+            indexes = [i for i, (image_path, _) in enumerate(full_dataset.samples) if full_path in image_path]
             indexes_list.append(indexes)
 
         # get the smallest amount of images in a class
