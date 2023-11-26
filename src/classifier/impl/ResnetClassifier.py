@@ -93,6 +93,7 @@ class ResnetClassifier(AbstractClassifier):
             self.model.train()
             running_loss = 0.0
             for images, labels in train_loader:
+                labels[labels != 0] = 1
                 images, labels = images.to(self.device), labels.to(self.device)
 
                 self.optimizer.zero_grad()
@@ -112,6 +113,7 @@ class ResnetClassifier(AbstractClassifier):
             test_loss = 0
             with torch.no_grad():
                 for images, labels in test_loader:
+                    labels[labels != 0] = 1
                     images, labels = images.to(self.device), labels.to(self.device)
 
                     outputs = self.model(images)
@@ -139,6 +141,7 @@ class ResnetClassifier(AbstractClassifier):
 
         with torch.no_grad():
             for images, labels in val_loader:
+                labels[labels != 0] = 1
                 images, labels = images.to(self.device), labels.to(self.device)
 
                 outputs = self.model(images)
