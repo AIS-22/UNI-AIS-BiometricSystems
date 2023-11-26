@@ -48,7 +48,7 @@ class ResnetClassifier(AbstractClassifier):
         self.optimizer = None
         self.num_image_channels = num_image_channels
         self.validation_loss = []
-        self.accuracy = []
+        self.accuracy = float
         self.confusion_matrix = []
         self.folds = folds
         self.batch_size = batch_size
@@ -130,7 +130,7 @@ class ResnetClassifier(AbstractClassifier):
 
         self.validation_loss.append(losses)
 
-    def evaluate(self, val_loader):
+    def evaluate(self, val_set):
         self.model.to(self.device)
         self.model.eval()
         correct = 0
@@ -138,6 +138,7 @@ class ResnetClassifier(AbstractClassifier):
         all_preds = []
         all_labels = []
         confusion_matrix = np.zeros((2, 2))
+        val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
 
         with torch.no_grad():
             for images, labels in val_loader:
@@ -163,14 +164,19 @@ class ResnetClassifier(AbstractClassifier):
         print(f'Recall: {recall:.4f}')
         print(f'F1-score: {f1_score:.4f}')
 
-        self.accuracy.append(accuracy)
-        self.confusion_matrix.append(confusion_matrix)
+        self.accuracy = accuracy
+        self.confusion_matrix = confusion_matrix
 
     def save_model(self):
         torch.save(self.model.state_dict(), "models/"+self.dataset_name +"/cnnParams_" + self.model_name + ".pt")
         print("Model saved")
 
     def load_model(self, model_path):
+        num_ftrs = self.model.fc.in_features
+        self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
+        self.model.to(self.device)
+
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
         self.model.load_state_dict(torch.load(model_path))
         print("Model loaded")
 
@@ -186,16 +192,10 @@ class ResnetClassifier(AbstractClassifier):
         np.save('results/'+self.dataset_name +'/losses_' + self.model_name + '.npy', losses)
         print('Losses saved')
 
-    def save_accuracy(self):
-        acc = np.average(self.accuracy)
-        np.save('results/' + self.dataset_name + '/accuracy_' + self.model_name + '.npy', acc)
+    def save_val_accuracy(self):
+        np.save('results/' + self.dataset_name + '/accuracy_' + self.model_name + '.npy', self.accuracy)
         print('Accuracy saved')
 
-    def save_confusion_matrix(self):
-        conf_matrix = np.zeros((2, 2))
-        # Add up losses of each fold run
-        for conf_element in self.confusion_matrix:
-            conf_matrix += conf_element
-
-        np.save('results/' + self.dataset_name + '/conf_matrix_' + self.model_name + '.npy', conf_matrix)
+    def save_val_confusion_matrix(self):
+        np.save('results/' + self.dataset_name + '/conf_matrix_' + self.model_name + '.npy', self.confusion_matrix)
         print('Confusion matrix saved')

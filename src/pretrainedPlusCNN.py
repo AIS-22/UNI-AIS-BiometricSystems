@@ -14,9 +14,9 @@ def main():
     This gives an example how to use the pretrained CNN with the PLUS dataset. With just the genuine and spoofed data.
     """
     data_loader = PlusDataLoader()
-    image_typ = [VeinImageType.GENUINE, VeinImageType.SPOOFED]
+    image_typ = [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE]
     datasetName = 'PLUS'
-    folder = ''
+    folder = '004'
     if folder == '':
         modelName = 'resnet18_' + datasetName + '_' + '_'.join(e.value for e in image_typ)
     else:

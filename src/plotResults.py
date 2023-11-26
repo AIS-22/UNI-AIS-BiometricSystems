@@ -17,15 +17,13 @@ def plot_confusion_matrix(datasetName):
             file = filename.split('.')[0]
             splitted_path = file.split('_')
 
-            categories = [splitted_path[-2], splitted_path[-1]]
+            categories = ['genuine', 'spoofed']
 
             # load dic from file
             conf_matrix = np.load('results/' + datasetName + '/' + filename, allow_pickle=True)
-            cmap = plt.get_cmap('tab20')
-
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)
-            sn.heatmap(conf_matrix, vmin=0, vmax=np.max(conf_matrix),
+            sn.heatmap(conf_matrix, vmin=0, vmax=np.max(conf_matrix)+1,
                        xticklabels=categories,
                        yticklabels=categories,
                        annot=True,
@@ -33,7 +31,8 @@ def plot_confusion_matrix(datasetName):
                        fmt=".0f",
                        annot_kws={'fontsize': 20})
             plt.xticks(rotation=45)
-            plt.savefig('plots/' + datasetName + '/conf_matrix_' + file + '.png')
+            plt.savefig('plots/' + datasetName + '/' + file + '.png')
+            print('Confusion Matrix Plot saved as: ' + 'plots/' + datasetName + '/' + file + '.png')
 
 
 def plot_loss_results(datasetName):
@@ -53,7 +52,8 @@ def plot_loss_results(datasetName):
             plt.xlabel('Epoch')
             plt.ylabel('Loss')
             plt.legend(title='Loss Functions ' + categories[0] + " - " + categories[1])
-            plt.savefig('plots/' + datasetName + '/loss_comparison_' + file + '.png')
+            plt.savefig('plots/' + datasetName + '/' + file + '.png')
+            print('Loss Plot saved as: ' + 'plots/' + datasetName + '/' + file + '.png')
 
 
 def main():

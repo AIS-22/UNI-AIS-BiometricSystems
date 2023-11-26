@@ -8,35 +8,34 @@ from src.classifier.impl.ResnetClassifier import ResnetClassifier
 
 
 def main():
-    datasetName = 'PLUS'
-    # "models/"+self.dataset_name +"/cnnParams_" + self.model_name + ".pt"
+    model_typ = [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE]
     image_typ = [VeinImageType.GENUINE, VeinImageType.SPOOFED]
     datasetName = 'PLUS'
-    folder = ''
+    folder = '003'
     if folder == '':
-        modelName = 'resnet18_' + datasetName + '_' + '_'.join(e.value for e in image_typ)
+        modelName = 'resnet18_' + datasetName + '_' + '_'.join(e.value for e in model_typ)
     else:
-        modelName = 'resnet18_' + datasetName + '_' + folder + '_' + '_'.join(e.value for e in image_typ)
+        modelName = 'resnet18_' + datasetName + '_' + folder + '_' + '_'.join(e.value for e in model_typ)
 
     modelName = 'cnnParams_' + modelName + ".pt"
-    model = ResnetClassifier(num_epochs=2,
+    model = ResnetClassifier(num_epochs=10,
                              learning_rate=0.001,
                              batch_size=16,
-                             folds=2,
+                             folds=5,
                              model_name=modelName,
                              dataset_name=datasetName,
                              model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
                              loss_function=nn.CrossEntropyLoss(),
                              num_image_channels=3)
 
-    model.load_model(modelName)
-
+    model.load_model("models/" + datasetName + "/" + modelName)
     data_loader = PlusDataLoader()
+
     dataset = data_loader.load_data(use_image_types=image_typ, datasetName=datasetName + '/val', folder=folder)
 
     model.evaluate(dataset)
-    model.save_accuracy()
-    model.save_confusion_matrix()
+    model.save_val_accuracy()
+    model.save_val_confusion_matrix()
 
 
 if __name__ == '__main__':
