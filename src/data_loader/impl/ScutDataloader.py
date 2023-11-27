@@ -9,6 +9,7 @@ from src.data_loader.AbstractDataLoader import AbstractDataLoader
 
 class ScutDataLoader(AbstractDataLoader):
 
-    def load_data(self, use_image_types: List[VeinImageType], transform=transforms.ToTensor()) -> Subset[Any]:
+    def load_data(self, use_image_types: List[VeinImageType], dataset_name, transform=transforms.ToTensor(),
+                  folder="") -> Subset[Any]:
         # TODO: Set __train_set and __test_set here!
         return None

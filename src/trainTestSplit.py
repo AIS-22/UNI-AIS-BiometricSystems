@@ -2,9 +2,9 @@ import splitfolders
 
 
 def main():
-    datasetName = 'PLUS'
+    dataset_name = 'PLUS'
     # train test split
-    splitfolders.ratio("data_prepared/" + datasetName, output="data/" + datasetName,
+    splitfolders.ratio("data_prepared/" + dataset_name, output="data/" + dataset_name,
                        seed=42, ratio=(.8, .2), group_prefix=None, move=False)  # default values
 
 

@@ -11,11 +11,11 @@ find . -type d \( -name "5_rs" -o -name "all_rs" \) -exec rm -r -- {} +
 echo "directories 5_rs and all_rs removed"
 
 ## PLUS dataset should only consider 003 and 004 synthetic subdirectories
-## mindepth 2 to not delete directories in the current directory
+## min depth 2 to not delete directories in the current directory
 cd PLUS
 find . -mindepth 2 -maxdepth 2 -type d ! \( -name "003" -o -name "004" \) -exec rm -r -- {}/ \;
 echo "PLUS dataset:"
-echo "All variants expact 003 and 004 delted"
+echo "All variants except 003 and 004 deleted"
 
 ## move images to variant folder
 find . -maxdepth 1 -mindepth 1 -type d | while read dir; do

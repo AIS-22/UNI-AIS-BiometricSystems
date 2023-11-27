@@ -3,27 +3,28 @@ import numpy as np
 import seaborn as sn
 import os
 
-def print_accuracy(datasetName):
-    for filename in os.listdir('results/'+datasetName):
+
+def print_accuracy(dataset_name):
+    for filename in os.listdir('results/' + dataset_name):
         if 'accuracy' in filename:
-            accuracy = np.load('results/' + datasetName + '/' + filename)
+            accuracy = np.load('results/' + dataset_name + '/' + filename)
             print('Modelname: ', filename)
             print('Accuracy:', accuracy)
             print('\n')
 
-def plot_confusion_matrix(datasetName):
-    for filename in os.listdir('results/'+datasetName):
+
+def plot_confusion_matrix(dataset_name):
+    for filename in os.listdir('results/' + dataset_name):
         if 'conf_matrix' in filename:
             file = filename.split('.')[0]
-            splitted_path = file.split('_')
 
             categories = ['genuine', 'spoofed']
 
             # load dic from file
-            conf_matrix = np.load('results/' + datasetName + '/' + filename, allow_pickle=True)
+            conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)
-            sn.heatmap(conf_matrix, vmin=0, vmax=np.max(conf_matrix)+1,
+            sn.heatmap(conf_matrix, vmin=0, vmax=np.max(conf_matrix) + 1,
                        xticklabels=categories,
                        yticklabels=categories,
                        annot=True,
@@ -31,20 +32,19 @@ def plot_confusion_matrix(datasetName):
                        fmt=".0f",
                        annot_kws={'fontsize': 20})
             plt.xticks(rotation=45)
-            plt.savefig('plots/' + datasetName + '/' + file + '.png')
-            print('Confusion Matrix Plot saved as: ' + 'plots/' + datasetName + '/' + file + '.png')
+            plt.savefig('plots/' + dataset_name + '/' + file + '.png')
+            print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
 
 
-def plot_loss_results(datasetName):
-
-    for filename in os.listdir('results/'+datasetName):
+def plot_loss_results(dataset_name):
+    for filename in os.listdir('results/' + dataset_name):
         if 'loss' in filename:
             file = filename.split('.')[0]
-            splitted_path = file.split('_')
+            split_path = file.split('_')
 
-            categories = [splitted_path[-2], splitted_path[-1]]
+            categories = [split_path[-2], split_path[-1]]
             # load dic from file
-            loss = np.load('results/'+datasetName + '/' + filename, allow_pickle=True)
+            loss = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
             plt.figure(figsize=(20, 10))
             plt.plot(range(1, 11), loss[:, 0], c='r', label='Train Loss')
             plt.plot(range(1, 11), loss[:, 1], c='g', label='Validation Loss')
@@ -52,15 +52,15 @@ def plot_loss_results(datasetName):
             plt.xlabel('Epoch')
             plt.ylabel('Loss')
             plt.legend(title='Loss Functions ' + categories[0] + " - " + categories[1])
-            plt.savefig('plots/' + datasetName + '/' + file + '.png')
-            print('Loss Plot saved as: ' + 'plots/' + datasetName + '/' + file + '.png')
+            plt.savefig('plots/' + dataset_name + '/' + file + '.png')
+            print('Loss Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
 
 
 def main():
-    datasetName = 'PLUS'
-    print_accuracy(datasetName)
-    plot_confusion_matrix(datasetName)
-    plot_loss_results(datasetName)
+    dataset_name = 'PLUS'
+    print_accuracy(dataset_name)
+    plot_confusion_matrix(dataset_name)
+    plot_loss_results(dataset_name)
 
 
 if __name__ == '__main__':

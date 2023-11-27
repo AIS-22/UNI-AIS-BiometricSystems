@@ -64,8 +64,8 @@ class ResnetClassifier(AbstractClassifier):
         # This should change the input conv layer, maybe there is no need for defining the new image sizes
         self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
-        num_ftrs = self.model.fc.in_features
-        self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
+        num_input_features = self.model.fc.in_features
+        self.model.fc = nn.Linear(num_input_features, self.num_output_nodes)
         self.model.to(self.device)
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
@@ -168,7 +168,7 @@ class ResnetClassifier(AbstractClassifier):
         self.confusion_matrix = confusion_matrix
 
     def save_model(self):
-        torch.save(self.model.state_dict(), "models/"+self.dataset_name +"/cnnParams_" + self.model_name + ".pt")
+        torch.save(self.model.state_dict(), "models/" + self.dataset_name + "/cnnParams_" + self.model_name + ".pt")
         print("Model saved")
 
     def load_model(self, model_path):
@@ -189,7 +189,7 @@ class ResnetClassifier(AbstractClassifier):
         # Get average
         losses /= self.folds
 
-        np.save('results/'+self.dataset_name +'/losses_' + self.model_name + '.npy', losses)
+        np.save('results/' + self.dataset_name + '/losses_' + self.model_name + '.npy', losses)
         print('Losses saved')
 
     def save_val_accuracy(self):
