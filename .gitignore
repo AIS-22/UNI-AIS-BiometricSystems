@@ -165,3 +165,8 @@ cython_debug/
 
 # images
 data/
+*.zip
+data_prepared/
+*.pt
+*.npy
+*.png
