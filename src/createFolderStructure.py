@@ -40,21 +40,22 @@ def structurePLUSdataset():
 
     # Move images to variant folder
     for dbClass in os.listdir("."):
-        os.chdir(dbClass)
-        for variant in os.listdir("."):
-            if os.path.isdir(variant):
-                os.chdir(variant)
-                for fold in os.listdir("."):
-                    if os.path.isdir(fold):
-                        for subdir in os.listdir(fold):
-                            for filename in os.listdir(os.path.join(fold, subdir)):
-                                source_path = os.path.join(fold, subdir, filename)
-                                # move file
-                                shutil.move(source_path, filename)
-                        # remove empty folder
-                        shutil.rmtree(fold)
-                os.chdir("..")
-        os.chdir("..")
+        if os.path.isdir(dbClass):
+            os.chdir(dbClass)
+            for variant in os.listdir("."):
+                if os.path.isdir(variant):
+                    os.chdir(variant)
+                    for fold in os.listdir("."):
+                        if os.path.isdir(fold):
+                            for subdir in os.listdir(fold):
+                                for filename in os.listdir(os.path.join(fold, subdir)):
+                                    source_path = os.path.join(fold, subdir, filename)
+                                    # move file
+                                    shutil.move(source_path, filename)
+                            # remove empty folder
+                            shutil.rmtree(fold)
+                    os.chdir("..")
+            os.chdir("..")
     print("Moved images from fold folder to variant folder and removed fold folders")
     os.chdir("..")
 
@@ -80,32 +81,33 @@ def structureIDIAPdataset():
 
     # Move images to variant folder
     for dbClass in os.listdir("."):
-        os.chdir(dbClass)
-        if "synthethic" in dbClass:
-            for variant in os.listdir("."):
-                if os.path.isdir(variant):
-                    os.chdir(variant)
-                    for fold in os.listdir("."):
-                        if os.path.isdir(fold):
-                            for subdir in os.listdir(fold):
-                                for filename in os.listdir(os.path.join(fold, subdir)):
-                                    source_path = os.path.join(fold, subdir, filename)
-                                    # move file
-                                    shutil.move(source_path, filename)
-                            # remove empty folder
-                            shutil.rmtree(fold)
-                    os.chdir("..")
-        else:
-            # genuine and spoofed structure differs from synthethic classes
-            for subdir in os.listdir("."):
-                if os.path.isdir(subdir):
-                    for filename in os.listdir(subdir):
-                        source_path = os.path.join(subdir, filename)
-                        # move file
-                        shutil.move(source_path, filename)
-                    # remove empty folder
-                    shutil.rmtree(subdir)
-        os.chdir("..")
+        if os.path.isdir(dbClass):
+            os.chdir(dbClass)
+            if "synthethic" in dbClass:
+                for variant in os.listdir("."):
+                    if os.path.isdir(variant):
+                        os.chdir(variant)
+                        for fold in os.listdir("."):
+                            if os.path.isdir(fold):
+                                for subdir in os.listdir(fold):
+                                    for filename in os.listdir(os.path.join(fold, subdir)):
+                                        source_path = os.path.join(fold, subdir, filename)
+                                        # move file
+                                        shutil.move(source_path, filename)
+                                # remove empty folder
+                                shutil.rmtree(fold)
+                        os.chdir("..")
+            else:
+                # genuine and spoofed structure differs from synthethic classes
+                for subdir in os.listdir("."):
+                    if os.path.isdir(subdir):
+                        for filename in os.listdir(subdir):
+                            source_path = os.path.join(subdir, filename)
+                            # move file
+                            shutil.move(source_path, filename)
+                        # remove empty folder
+                        shutil.rmtree(subdir)
+            os.chdir("..")
     print("Moved images from fold folder to variant folder and removed fold folders")
     os.chdir("..")
 
@@ -121,44 +123,45 @@ def structurePROTECTdataset():
 
     # Move images to variant folder
     for dbClass in os.listdir("."):
-        os.chdir(dbClass)
-        if "synthethic" in dbClass:
-            for variant in os.listdir("."):
-                if os.path.isdir(variant):
-                    os.chdir(variant)
-                    # PROTECT dataset has no fold directories for the variant 110
-                    if "110" in variant:
-                        for subdir in os.listdir("."):
-                            p = os.getcwd()
-                            if os.path.isdir(subdir):
-                                for filename in os.listdir(subdir):
-                                    source_path = os.path.join(subdir, filename)
-                                    # move file
-                                    shutil.move(source_path, filename)
-                                # remove empty folder
-                                shutil.rmtree(subdir)
-                    else:
-                        for fold in os.listdir("."):
-                            if os.path.isdir(fold):
-                                for subdir in os.listdir(fold):
-                                    for filename in os.listdir(os.path.join(fold, subdir)):
-                                        source_path = os.path.join(fold, subdir, filename)
+        if os.path.isdir(dbClass):
+            os.chdir(dbClass)
+            if "synthethic" in dbClass:
+                for variant in os.listdir("."):
+                    if os.path.isdir(variant):
+                        os.chdir(variant)
+                        # PROTECT dataset has no fold directories for the variant 110
+                        if "110" in variant:
+                            for subdir in os.listdir("."):
+                                p = os.getcwd()
+                                if os.path.isdir(subdir):
+                                    for filename in os.listdir(subdir):
+                                        source_path = os.path.join(subdir, filename)
                                         # move file
                                         shutil.move(source_path, filename)
-                                # remove empty folder
-                                shutil.rmtree(fold)
-                    os.chdir("..")
-        else:
-            # genuine and spoofed structure differs from synthethic classes
-            for subdir in os.listdir("."):
-                if os.path.isdir(subdir):
-                    for filename in os.listdir(subdir):
-                        source_path = os.path.join(subdir, filename)
-                        # move file
-                        shutil.move(source_path, filename)
-                    # remove empty folder
-                    shutil.rmtree(subdir)
-        os.chdir("..")
+                                    # remove empty folder
+                                    shutil.rmtree(subdir)
+                        else:
+                            for fold in os.listdir("."):
+                                if os.path.isdir(fold):
+                                    for subdir in os.listdir(fold):
+                                        for filename in os.listdir(os.path.join(fold, subdir)):
+                                            source_path = os.path.join(fold, subdir, filename)
+                                            # move file
+                                            shutil.move(source_path, filename)
+                                    # remove empty folder
+                                    shutil.rmtree(fold)
+                        os.chdir("..")
+            else:
+                # genuine and spoofed structure differs from synthethic classes
+                for subdir in os.listdir("."):
+                    if os.path.isdir(subdir):
+                        for filename in os.listdir(subdir):
+                            source_path = os.path.join(subdir, filename)
+                            # move file
+                            shutil.move(source_path, filename)
+                        # remove empty folder
+                        shutil.rmtree(subdir)
+            os.chdir("..")
     print("Moved images from fold folder to variant folder and removed fold folders")
     os.chdir("..")
 
@@ -184,32 +187,33 @@ def structureSCUTdataset():
 
     # Move images to variant folder
     for dbClass in os.listdir("."):
-        os.chdir(dbClass)
-        if "synthethic" in dbClass:
-            for variant in os.listdir("."):
-                if os.path.isdir(variant):
-                    os.chdir(variant)
-                    for fold in os.listdir("."):
-                        if os.path.isdir(fold):
-                            for subdir in os.listdir(fold):
-                                for filename in os.listdir(os.path.join(fold, subdir)):
-                                    source_path = os.path.join(fold, subdir, filename)
-                                    # move file
-                                    shutil.move(source_path, filename)
-                            # remove empty folder
-                            shutil.rmtree(fold)
-                    os.chdir("..")
-        else:
-            # genuine and spoofed structure differs from synthethic classes
-            for subdir in os.listdir("."):
-                if os.path.isdir(subdir):
-                    for filename in os.listdir(subdir):
-                        source_path = os.path.join(subdir, filename)
-                        # move file
-                        shutil.move(source_path, filename)
-                    # remove empty folder
-                    shutil.rmtree(subdir)
-        os.chdir("..")
+        if os.path.isdir(dbClass):
+            os.chdir(dbClass)
+            if "synthethic" in dbClass:
+                for variant in os.listdir("."):
+                    if os.path.isdir(variant):
+                        os.chdir(variant)
+                        for fold in os.listdir("."):
+                            if os.path.isdir(fold):
+                                for subdir in os.listdir(fold):
+                                    for filename in os.listdir(os.path.join(fold, subdir)):
+                                        source_path = os.path.join(fold, subdir, filename)
+                                        # move file
+                                        shutil.move(source_path, filename)
+                                # remove empty folder
+                                shutil.rmtree(fold)
+                        os.chdir("..")
+            else:
+                # genuine and spoofed structure differs from synthethic classes
+                for subdir in os.listdir("."):
+                    if os.path.isdir(subdir):
+                        for filename in os.listdir(subdir):
+                            source_path = os.path.join(subdir, filename)
+                            # move file
+                            shutil.move(source_path, filename)
+                        # remove empty folder
+                        shutil.rmtree(subdir)
+            os.chdir("..")
     print("Moved images from fold folder to variant folder and removed fold folders")
     os.chdir("..")
 
@@ -226,19 +230,21 @@ def createClassForEachVariant():
                     for variant in os.listdir(dbClass):
                         new_folder = os.path.join(dbClass, variant).replace("/", "_")
                         shutil.copytree(dbClass, new_folder)
-                        os.chdir(new_folder)
-                        # delete all other variants in folder
-                        for subdir in os.listdir("."):
-                            if not variant in subdir and os.path.isdir(subdir):
-                                shutil.rmtree(subdir)
-                        # move images out of variant folder
-                        for filename in os.listdir(variant):
-                            source_path = os.path.join(variant, filename)
-                            shutil.move(source_path, filename)
+                        if os.path.isdir(new_folder):
+                            os.chdir(new_folder)
+                            # delete all other variants in folder
+                            for subdir in os.listdir("."):
+                                if not variant in subdir and os.path.isdir(subdir):
+                                    shutil.rmtree(subdir)
+                            # move images out of variant folder
+                            if os.path.isdir(variant):
+                                for filename in os.listdir(variant):
+                                    source_path = os.path.join(variant, filename)
+                                    shutil.move(source_path, filename)
 
-                        # delete empty folder
-                        shutil.rmtree(variant)
-                        os.chdir("..")
+                                # delete empty folder
+                                shutil.rmtree(variant)
+                            os.chdir("..")
                     # delete folder with all variants in it
                     shutil.rmtree(dbClass)
             os.chdir("..")
