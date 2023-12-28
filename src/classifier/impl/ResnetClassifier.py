@@ -9,7 +9,7 @@ from torch.nn.modules.loss import Module
 from torch.utils.data import DataLoader, Subset
 from torchvision.models.resnet import ResNet
 
-from src.classifier.AbstractClassifier import AbstractClassifier
+from classifier.AbstractClassifier import AbstractClassifier
 
 
 def _get_device() -> str:
@@ -168,6 +168,7 @@ class ResnetClassifier(AbstractClassifier):
         self.confusion_matrix = confusion_matrix
 
     def save_model(self):
+        self.model.to('cpu')
         torch.save(self.model.state_dict(), "models/" + self.dataset_name + "/cnnParams_" + self.model_name + ".pt")
         print("Model saved")
 

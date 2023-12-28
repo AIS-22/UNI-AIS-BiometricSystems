@@ -5,8 +5,8 @@ import torchvision
 from torch.utils.data import Subset
 from torchvision.transforms import transforms
 
-from src.VeinImageType import VeinImageType
-from src.data_loader.AbstractDataLoader import AbstractDataLoader
+from VeinImageType import VeinImageType
+from data_loader.AbstractDataLoader import AbstractDataLoader
 
 
 class PlusDataLoader(AbstractDataLoader):
@@ -22,7 +22,7 @@ class PlusDataLoader(AbstractDataLoader):
         full_dataset = torchvision.datasets.ImageFolder(root=root_path, transform=transform)
         indexes_list = []
         for i, path in enumerate(use_image_types):
-            folder_part = "_" + folder + '/' if "synthetic" in path.value else '/'
+            folder_part = "_" + folder + '/' if "synthethic" in path.value else '/'
             full_path = root_path + path.value + folder_part
             indexes = [i for i, (image_path, _) in enumerate(full_dataset.samples) if full_path in image_path]
             indexes_list.append(indexes)

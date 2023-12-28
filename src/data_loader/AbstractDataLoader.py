@@ -4,7 +4,7 @@ from typing import List, Any
 from torch.utils.data import Subset
 from torchvision.transforms import transforms
 
-from src.VeinImageType import VeinImageType
+from VeinImageType import VeinImageType
 
 
 class AbstractDataLoader(ABC):
