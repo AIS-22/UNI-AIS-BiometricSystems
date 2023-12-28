@@ -34,6 +34,7 @@ def plot_confusion_matrix(dataset_name):
             plt.xticks(rotation=45)
             plt.savefig('plots/' + dataset_name + '/' + file + '.png')
             print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
+            plt.close()
 
 
 def plot_loss_results(dataset_name):
@@ -54,13 +55,16 @@ def plot_loss_results(dataset_name):
             plt.legend(title='Loss Functions ' + categories[0] + " - " + categories[1])
             plt.savefig('plots/' + dataset_name + '/' + file + '.png')
             print('Loss Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
+            plt.close()
 
 
 def main():
-    dataset_name = 'PLUS'
-    print_accuracy(dataset_name)
-    plot_confusion_matrix(dataset_name)
-    plot_loss_results(dataset_name)
+    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
+    for dataset_name in datasets:
+        print('Plotting results for ' + dataset_name)
+        print_accuracy(dataset_name)
+        plot_confusion_matrix(dataset_name)
+        plot_loss_results(dataset_name)
 
 
 if __name__ == '__main__':
