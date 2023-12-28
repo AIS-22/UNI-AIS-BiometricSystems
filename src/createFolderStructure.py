@@ -1,14 +1,14 @@
 import os
 import shutil
 import splitfolders
-
+import cv2
 
 def deleteFilesAndFolders():
     # Iterate through all datasets and classes and delete .txt, .pdf files and resize folders
     for root, dirs, files in os.walk("."):
         # Delete if .txt or .pdf
         for file in files:
-            if file.endswith(".txt") or file.endswith(".pdf"):
+            if file.endswith(".txt") or file.endswith(".pdf") or file.endswith(".DS_Store"):
                 file_path = os.path.join(root, file)
                 os.remove(file_path)
         # Delete folders containing the string "rs"
@@ -16,7 +16,6 @@ def deleteFilesAndFolders():
             if "_rs" in folder:
                 folder_path = os.path.join(root, folder)
                 shutil.rmtree(folder_path)
-
 
 def structurePLUSdataset():
     # PLUS dataset has already the needed structure for genuine and spoofed. Only the synthethic classes must be structured
@@ -132,7 +131,6 @@ def structurePROTECTdataset():
                         # PROTECT dataset has no fold directories for the variant 110
                         if "110" in variant:
                             for subdir in os.listdir("."):
-                                p = os.getcwd()
                                 if os.path.isdir(subdir):
                                     for filename in os.listdir(subdir):
                                         source_path = os.path.join(subdir, filename)
@@ -260,6 +258,74 @@ def trainTestSplit():
                            seed=42, ratio=(.8, .2),
                            group_prefix=None, move=False)
 
+def preprocessSCUTdataset():
+    # Rotate the genuine and spoofed images by 90° to the right
+    # get all folders in SCUT train and validation folder and write them in a list
+    train_folders = ["genuine", "spoofed"]
+    validation_folders = ["genuine", "spoofed"]
+    # go through all genuine and spoofed images and rotate them by 90° to the right
+    for folder in train_folders:
+        for image in os.listdir(os.path.join("data/SCUT/train", folder)):
+            image_path = os.path.join("data/SCUT/train", folder, image)
+            image = cv2.imread(image_path)
+            if image is not None:
+                image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+                cv2.imwrite(image_path, image)
+    for folder in validation_folders:
+        for image in os.listdir(os.path.join("data/SCUT/val", folder)):
+            image_path = os.path.join("data/SCUT/val", folder, image)
+            image = cv2.imread(image_path)
+            if image is not None:
+                image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+                cv2.imwrite(image_path, image)
+    print("Preprocessed SCUT dataset")
+
+def resizeData():
+    datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
+    for db in datasets:
+        # get all folders in IDIAP train and validation folder and write them in a list
+        train_folders = []
+        validation_folders = []
+        for _, dirs, _ in os.walk(f"data/{db}/train"):
+            for folder in dirs:
+                train_folders.append(folder)
+        for _, dirs, _ in os.walk(f"data/{db}/val"):
+            for folder in dirs:
+                validation_folders.append(folder)
+        # remove the genuine and spoofed folder from the list
+        train_folders.remove("genuine")
+        train_folders.remove("spoofed")
+        validation_folders.remove("genuine")
+        validation_folders.remove("spoofed")
+        # get of one image in the genuine folder the height and width
+        genuine_folder = f"data/{db}/train/genuine"
+        genuine_images = os.listdir(genuine_folder)
+        if len(genuine_images) > 0:
+            image_path = os.path.join(genuine_folder, genuine_images[0])
+            image = cv2.imread(image_path)
+            if image is not None:
+                genuine_height, genuine_width, _ = image.shape
+        # go through all the folders in the list if the image is not the same size resize it
+        for folder in train_folders:
+            for image in os.listdir(os.path.join(f"data/{db}/train", folder)):
+                image_path = os.path.join(f"data/{db}/train", folder, image)
+                image = cv2.imread(image_path)
+                if image is not None:
+                    height, width, _ = image.shape
+                    if height != genuine_height or width != genuine_width:
+                        image = cv2.resize(image, (genuine_width, genuine_height), interpolation=cv2.INTER_LANCZOS4)
+                        cv2.imwrite(image_path, image)
+        for folder in validation_folders:
+            for image in os.listdir(os.path.join(f"data/{db}/val", folder)):
+                image_path = os.path.join(f"data/{db}/val", folder, image)
+                image = cv2.imread(image_path)
+                if image is not None:
+                    height, width, _ = image.shape
+                    if height != genuine_height or width != genuine_width:
+                        image = cv2.resize(image, (genuine_width, genuine_height), interpolation=cv2.INTER_LANCZOS4)
+                        cv2.imwrite(image_path, image)
+        print(f"Preprocessed {db} dataset")
+
 
 def main():
     os.chdir("data_prepared")
@@ -271,6 +337,9 @@ def main():
     createClassForEachVariant()
     trainTestSplit()
     os.chdir("..")
+    preprocessSCUTdataset()
+    resizeData()
+
 
 
 if __name__ == '__main__':
