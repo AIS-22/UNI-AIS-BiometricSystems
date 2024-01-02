@@ -3,7 +3,8 @@ import shutil
 import splitfolders
 import cv2
 
-def deleteFilesAndFolders():
+
+def delete_files_and_folders():
     # Iterate through all datasets and classes and delete .txt, .pdf files and resize folders
     for root, dirs, files in os.walk("."):
         # Delete if .txt or .pdf
@@ -17,7 +18,8 @@ def deleteFilesAndFolders():
                 folder_path = os.path.join(root, folder)
                 shutil.rmtree(folder_path)
 
-def structurePLUSdataset():
+
+def structure_plus_dataset():
     # PLUS dataset has already the needed structure for genuine and spoofed. Only the synthethic classes must be structured
     # class synthethic_stargan-v2 has for each fold two subfolders (latent and reference)
     # the folders have different images but the same name. By moving the images get overwritten
@@ -28,19 +30,19 @@ def structurePLUSdataset():
     os.chdir("PLUS")
 
     # Delete all variants except 003 and 004
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
             for variant in os.listdir("."):
-                if os.path.isdir(variant) and "synthethic" in dbClass and variant not in ["003", "004"]:
+                if os.path.isdir(variant) and "synthethic" in db_class and variant not in ["003", "004"]:
                     shutil.rmtree(variant)
             os.chdir("..")
     print("All variants except 003 and 004 deleted")
 
     # Move images to variant folder
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
             for variant in os.listdir("."):
                 if os.path.isdir(variant):
                     os.chdir(variant)
@@ -59,7 +61,7 @@ def structurePLUSdataset():
     os.chdir("..")
 
 
-def structureIDIAPdataset():
+def structure_idiap_dataset():
     # class synthethic_stargan-v2 has for each fold two subfolders (latent and reference)
     # the folders have different images but the same name. By moving the images get overwritten
     # --> result are all images from the folder reference
@@ -69,20 +71,20 @@ def structureIDIAPdataset():
     os.chdir("IDIAP")
 
     # Delete all variants except 009
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
             for variant in os.listdir("."):
-                if os.path.isdir(variant) and "synthethic" in dbClass and variant != "009":
+                if os.path.isdir(variant) and "synthethic" in db_class and variant != "009":
                     shutil.rmtree(variant)
             os.chdir("..")
     print("All variants except 009 deleted")
 
     # Move images to variant folder
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
-            if "synthethic" in dbClass:
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
+            if "synthethic" in db_class:
                 for variant in os.listdir("."):
                     if os.path.isdir(variant):
                         os.chdir(variant)
@@ -111,7 +113,7 @@ def structureIDIAPdataset():
     os.chdir("..")
 
 
-def structurePROTECTdataset():
+def structure_protect_dataset():
     # class synthethic_stargan-v2 has for each fold two subfolders (latent and reference)
     # the folders have different images but the same name. By moving the images get overwritten
     # --> result are all images from the folder reference
@@ -121,10 +123,10 @@ def structurePROTECTdataset():
     os.chdir("PROTECT")
 
     # Move images to variant folder
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
-            if "synthethic" in dbClass:
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
+            if "synthethic" in db_class:
                 for variant in os.listdir("."):
                     if os.path.isdir(variant):
                         os.chdir(variant)
@@ -164,7 +166,7 @@ def structurePROTECTdataset():
     os.chdir("..")
 
 
-def structureSCUTdataset():
+def structure_scut_dataset():
     # class synthethic_stargan-v2 has for each fold two subfolders (latent and reference)
     # the folders have different images but the same name. By moving the images get overwritten
     # --> result are all images from the folder reference
@@ -174,20 +176,20 @@ def structureSCUTdataset():
     os.chdir("SCUT")
 
     # Delete all variants except 007 and 008
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
             for variant in os.listdir("."):
-                if os.path.isdir(variant) and "synthethic" in dbClass and variant not in ["007", "008"]:
+                if os.path.isdir(variant) and "synthethic" in db_class and variant not in ["007", "008"]:
                     shutil.rmtree(variant)
             os.chdir("..")
     print("All variants except 007 and 008 deleted")
 
     # Move images to variant folder
-    for dbClass in os.listdir("."):
-        if os.path.isdir(dbClass):
-            os.chdir(dbClass)
-            if "synthethic" in dbClass:
+    for db_class in os.listdir("."):
+        if os.path.isdir(db_class):
+            os.chdir(db_class)
+            if "synthethic" in db_class:
                 for variant in os.listdir("."):
                     if os.path.isdir(variant):
                         os.chdir(variant)
@@ -216,18 +218,18 @@ def structureSCUTdataset():
     os.chdir("..")
 
 
-def createClassForEachVariant():
+def create_class_for_each_variant():
     # each synthethic class has subfolder (variant). This function splits them into different classes for each variant
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
     for db in datasets:
         if os.path.isdir(db):
             os.chdir(db)
             # Copy each variant to its own folder
-            for dbClass in os.listdir("."):
-                if "synthethic" in dbClass:
-                    for variant in os.listdir(dbClass):
-                        new_folder = os.path.join(dbClass, variant).replace("/", "_")
-                        shutil.copytree(dbClass, new_folder)
+            for db_class in os.listdir("."):
+                if "synthethic" in db_class:
+                    for variant in os.listdir(db_class):
+                        new_folder = os.path.join(db_class, variant).replace("/", "_")
+                        shutil.copytree(db_class, new_folder)
                         if os.path.isdir(new_folder):
                             os.chdir(new_folder)
                             # delete all other variants in folder
@@ -244,13 +246,13 @@ def createClassForEachVariant():
                                 shutil.rmtree(variant)
                             os.chdir("..")
                     # delete folder with all variants in it
-                    shutil.rmtree(dbClass)
+                    shutil.rmtree(db_class)
             os.chdir("..")
 
     print("Created for every variant own class")
 
 
-def trainTestSplit():
+def train_test_split():
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
     for db in datasets:
         # train test split
@@ -258,7 +260,8 @@ def trainTestSplit():
                            seed=42, ratio=(.8, .2),
                            group_prefix=None, move=False)
 
-def preprocessSCUTdataset():
+
+def preprocess_scut_dataset():
     # Rotate the genuine and spoofed images by 90° to the right
     # get all folders in SCUT train and validation folder and write them in a list
     train_folders = ["genuine", "spoofed"]
@@ -280,7 +283,8 @@ def preprocessSCUTdataset():
                 cv2.imwrite(image_path, image)
     print("Preprocessed SCUT dataset")
 
-def resizeData():
+
+def resize_data():
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
     for db in datasets:
         # get all folders in IDIAP train and validation folder and write them in a list
@@ -339,7 +343,6 @@ def main():
     os.chdir("..")
     preprocessSCUTdataset()
     resizeData()
-
 
 
 if __name__ == '__main__':
