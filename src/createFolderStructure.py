@@ -20,7 +20,7 @@ def delete_files_and_folders():
 
 
 def structure_plus_dataset():
-    # PLUS dataset has already the needed structure for genuine and spoofed. 
+    # PLUS dataset has already the needed structure for genuine and spoofed.
     # Only the synthethic classes must be structured
     # class synthethic_stargan-v2 has for each fold two subfolders (latent and reference)
     # the folders have different images but the same name. By moving the images get overwritten
