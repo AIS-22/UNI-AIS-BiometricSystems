@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 
 class AbstractClassifier(ABC):
     @abstractmethod
-    def train(self, X, y) -> None:
+    def train(self, x) -> None:
         pass
 
     @abstractmethod
-    def evaluate(self, X) -> None:
+    def evaluate(self, x) -> None:
         pass
 
     @abstractmethod
