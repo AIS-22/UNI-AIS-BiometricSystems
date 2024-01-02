@@ -234,7 +234,7 @@ def create_class_for_each_variant():
                             os.chdir(new_folder)
                             # delete all other variants in folder
                             for subdir in os.listdir("."):
-                                if not variant in subdir and os.path.isdir(subdir):
+                                if variant not in subdir and os.path.isdir(subdir):
                                     shutil.rmtree(subdir)
                             # move images out of variant folder
                             if os.path.isdir(variant):
