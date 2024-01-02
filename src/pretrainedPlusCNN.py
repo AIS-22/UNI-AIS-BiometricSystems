@@ -46,9 +46,9 @@ def main():
     for model_trained_types, dataset_name, folder in options:
         print("Training model for " + dataset_name + " with " + folder + " folder and " + str(model_trained_types[1]))
         if folder == '':
-            model_name = 'resnet18_' + dataset_name + '_' + '_'.join(e.value for e in model_trained_types)
+            model_name = f'resnet18_{dataset_name}_' + '_'.join(e.value for e in model_trained_types)
         else:
-            model_name = 'resnet18_' + dataset_name + '_' + folder + '_' + '_'.join(e.value for e in model_trained_types)
+            model_name = f'resnet18_{dataset_name}_{folder}_' + '_'.join(e.value for e in model_trained_types)
 
         dataset = data_loader.load_data(use_image_types=model_trained_types, dataset_name=dataset_name + '/train',
                                         folder=folder)
