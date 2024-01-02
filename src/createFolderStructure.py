@@ -333,17 +333,18 @@ def resize_data():
 
 def main():
     os.chdir("data_prepared")
-    deleteFilesAndFolders()
-    structureSCUTdataset()
-    structureIDIAPdataset()
-    structurePROTECTdataset()
-    structurePLUSdataset()
-    createClassForEachVariant()
-    trainTestSplit()
+    delete_files_and_folders()
+    structure_scut_dataset()
+    structure_idiap_dataset()
+    structure_protect_dataset()
+    structure_plus_dataset()
+    create_class_for_each_variant()
+    train_test_split()
     os.chdir("..")
-    preprocessSCUTdataset()
-    resizeData()
+    preprocess_scut_dataset()
+    resize_data()
 
 
 if __name__ == '__main__':
     main()
+    

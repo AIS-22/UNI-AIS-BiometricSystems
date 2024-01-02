@@ -11,36 +11,36 @@ def main():
 
     # options = [model_name, dataset_name, folder]
     options = [
-        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],"PLUS", ''),                # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"PLUS", '003'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"PLUS", '004'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"PLUS", '003'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"PLUS", '004'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"PLUS", '003'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"PLUS", '004'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"PLUS", '003'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"PLUS", '004'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],"PROTECT", ''),             # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"PROTECT", '010'),  # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"PROTECT", '110'),  # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"PROTECT", '010'),   # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"PROTECT", '010'),   # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"PROTECT", '010'),   # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"PROTECT", '110'),   # Done
-        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],"IDIAP", ''),               # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"IDIAP", '009'),    # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"IDIAP", '009'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"IDIAP", '009'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"IDIAP", '009'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],"SCUT", ''),                # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"SCUT", '007'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE],"SCUT", '008'),     # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"SCUT", '007'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST],"SCUT", '008'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"SCUT", '007'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT],"SCUT", '008'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"SCUT", '007'),      # Done
-        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR],"SCUT", '008'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "PLUS", ''),                # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '003'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '004'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '003'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '004'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '003'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '004'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '003'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '004'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "PROTECT", ''),             # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PROTECT", '010'),  # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PROTECT", '110'),  # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PROTECT", '010'),   # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PROTECT", '010'),   # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PROTECT", '010'),   # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PROTECT", '110'),   # Done
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "IDIAP", ''),               # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "IDIAP", '009'),    # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "IDIAP", '009'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "IDIAP", '009'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "IDIAP", '009'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "SCUT", ''),                # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "SCUT", '007'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "SCUT", '008'),     # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "SCUT", '007'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "SCUT", '008'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "SCUT", '007'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "SCUT", '008'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "SCUT", '007'),      # Done
+        ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "SCUT", '008'),      # Done
     ]
 
     for model_trained_types, dataset_name, folder in options:
