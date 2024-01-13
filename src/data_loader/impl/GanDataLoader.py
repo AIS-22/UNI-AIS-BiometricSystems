@@ -36,7 +36,7 @@ class GanDataLoader(AbstractDataLoader):
     def load_data(self, use_image_types: List[VeinImageType], dataset_name,
                   transform=transforms.ToTensor()) -> Subset[Any]:
 
-        root_path = 'data/' + dataset_name + '/'
+        root_path = f'data/{dataset_name}/'
         # Load the entire dataset
         full_dataset = torchvision.datasets.ImageFolder(root=root_path, transform=transform)
         sub_folders = full_dataset.classes
@@ -44,7 +44,7 @@ class GanDataLoader(AbstractDataLoader):
         sub_folders.remove('spoofed')
         indexes_list = []
         for sub_folder in sub_folders:
-            full_path = root_path + sub_folder + '/'
+            full_path = f'{root_path}{sub_folder}/'
             indexes = [i for i, (image_path, _) in enumerate(full_dataset.samples) if full_path in image_path]
             indexes_list.append(indexes)
 
@@ -64,5 +64,4 @@ class GanDataLoader(AbstractDataLoader):
 
         # Get filtered dataset
         dataset = CustomDataset(full_dataset, all_indexes)
-        print(dataset.classes)
         return dataset

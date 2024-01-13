@@ -169,16 +169,17 @@ class GanClassifier(AbstractClassifier):
 
     def save_model(self):
         self.model.to('cpu')
-        torch.save(self.model.state_dict(), "models/" + self.dataset_name + "/cnnParams_ganSeperatorGan.pt")
+        torch.save(self.model.state_dict(), f"models/{self.dataset_name}/cnnParams_{self.model_name}.pt")
         print("Model saved")
 
-    def load_model(self, model_path):
+    def load_model(self, model_path, dataset):
         num_ftrs = self.model.fc.in_features
+        self.num_output_nodes = len(dataset.classes)
         self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
-        self.model.to(self.device)
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
         self.model.load_state_dict(torch.load(model_path))
+        self.model.to(self.device)
         print("Model loaded")
 
     def save_losses(self):
@@ -190,13 +191,13 @@ class GanClassifier(AbstractClassifier):
         # Get average
         losses /= self.folds
 
-        np.save('results/' + self.dataset_name + '/losses_' + self.model_name + '.npy', losses)
+        np.save(f'results/{self.dataset_name}/losses_{self.model_name}.npy', losses)
         print('Losses saved')
 
     def save_val_accuracy(self):
-        np.save('results/' + self.dataset_name + '/accuracy_' + self.model_name + '.npy', self.accuracy)
+        np.save(f'results/{self.dataset_name}/accuracy_{self.model_name}.npy', self.accuracy)
         print('Accuracy saved')
 
     def save_val_confusion_matrix(self):
-        np.save('results/' + self.dataset_name + '/conf_matrix_' + self.model_name + '.npy', self.confusion_matrix)
+        np.save(f'results/{self.dataset_name}/conf_matrix_{self.model_name}.npy', self.confusion_matrix)
         print('Confusion matrix saved')
