@@ -7,13 +7,11 @@ from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
 from sklearn.model_selection import KFold
 from torch import nn, optim
 from torch.nn.modules.loss import Module
-from torch.utils.data import DataLoader, Subset
+from torch.utils.data import DataLoader
 from torchvision.models.resnet import ResNet
 
 from classifier.AbstractClassifier import AbstractClassifier
 from CustomDataset import CustomDataset
-
-import torch.nn.functional as F
 
 
 def _get_device() -> str:
@@ -66,7 +64,7 @@ class GanClassifier(AbstractClassifier):
         self.num_output_nodes = len(dataset.classes)
 
         # This should change the input conv layer, maybe there is no need for defining the new image sizes
-        #self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        # self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
         num_input_features = self.model.fc.in_features
         self.model.fc = nn.Linear(num_input_features, self.num_output_nodes)
@@ -97,9 +95,7 @@ class GanClassifier(AbstractClassifier):
             self.model.train()
             running_loss = 0.0
             for images, labels in train_loader:
-                images = images.to(self.device)
-                #labels = F.one_hot(labels, num_classes=self.num_output_nodes).to(torch.float32).to(self.device)
-                labels = labels.to(self.device)
+                images, labels = images.to(self.device), labels.to(self.device)
 
                 self.optimizer.zero_grad()
                 outputs = self.model(images)
@@ -146,7 +142,6 @@ class GanClassifier(AbstractClassifier):
         with torch.no_grad():
             for images, labels in val_loader:
                 images, labels = images.to(self.device), labels.to(self.device)
-                #labels = F.one_hot(labels, num_classes=self.num_output_nodes).to(torch.float32).to(self.device)
 
                 outputs = self.model(images)
                 predicted = torch.max(outputs.data, 1)[1]

@@ -201,13 +201,17 @@ class SpoofedResizedClassifier(AbstractClassifier):
     def save_val_accuracy(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
         if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
             os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
-        np.save(f"results/mixed/m_{model_ds}_e_{eval_ds}/accuracy_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.npy", self.accuracy)
-        
+        np.save(f"""results/mixed/m_{model_ds}_e_{eval_ds}/
+                accuracy_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}
+                _{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])
+                                                   }_{eval_ds_folder}.npy""", self.accuracy)
         print('Accuracy saved')
 
     def save_val_confusion_matrix(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
-        #np.save(f"results/mixed/conf_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.npy", self.confusion_matrix)
         if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
             os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
-        self.df_cm.to_csv(f"results/mixed/m_{model_ds}_e_{eval_ds}/conf_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.csv")
+        self.df_cm.to_csv(f"""results/mixed/m_{model_ds}_e_{eval_ds}/
+                          conf_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}
+                          _{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}
+                          _{eval_ds_folder}.csv""")
         print('Confusion matrix saved')
