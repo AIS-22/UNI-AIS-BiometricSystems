@@ -32,17 +32,19 @@ def main():
 
         model_name = f'cnnParams_resnet18_{dataset_name}_ganSeperator.pt'
         model = GanClassifier(num_epochs=10,
-                                 learning_rate=0.001,
-                                 batch_size=16,
-                                 folds=5,
-                                 model_name=model_name,
-                                 dataset_name=dataset_name,
-                                 model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
-                                 loss_function=nn.CrossEntropyLoss(),
-                                 num_image_channels=3)
+                              learning_rate=0.001,
+                              batch_size=16,
+                              folds=5,
+                              model_name=model_name,
+                              dataset_name=dataset_name,
+                              model=models.resnet18(
+                                  weights=models.ResNet18_Weights.DEFAULT),
+                              loss_function=nn.CrossEntropyLoss(),
+                              num_image_channels=3)
 
         data_loader = GanDataLoader()
-        dataset = data_loader.load_data(use_image_types=eval_types, dataset_name=f'{dataset_name}/val')
+        dataset = data_loader.load_data(
+            use_image_types=eval_types, dataset_name=f'{dataset_name}/val')
 
         model.load_model(f"models/{dataset_name}/{model_name}", dataset)
 

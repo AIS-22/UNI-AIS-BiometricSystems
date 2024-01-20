@@ -15,7 +15,7 @@ def print_accuracy(dataset_name):
 
 
 def plot_confusion_matrix(dataset_name):
-    if dataset_name is 'mixed':
+    if dataset_name == 'mixed':
         for filename in os.listdir(f'results/{dataset_name}'):
             if 'conf_matrix' in filename:
                 file = filename.split('.')[0]
@@ -55,7 +55,7 @@ def plot_confusion_matrix(dataset_name):
 
 def plot_loss_results(dataset_name):
     for filename in os.listdir('results/' + dataset_name):
-        if 'loss' in filename and not 'ganSeperator' in filename:
+        if 'loss' in filename and 'ganSeperator' not in filename:
             file = filename.split('.')[0]
             split_path = file.split('_')
 
@@ -76,8 +76,6 @@ def plot_loss_results(dataset_name):
 
 def main():
     datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
-    #datasets = ['mixed']
-    #datasets = ['SCUT']
     for dataset_name in datasets:
         print('Plotting results for ' + dataset_name)
         print_accuracy(dataset_name)

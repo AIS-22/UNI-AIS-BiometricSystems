@@ -59,8 +59,8 @@ def plot_loss_results(dataset_name):
 
 
 def main():
-    #datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
-    #datasets = ['mixed']
+    # datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
+    # datasets = ['mixed']
     datasets = ['SCUT']
     for dataset_name in datasets:
         print('Plotting results for ' + dataset_name)

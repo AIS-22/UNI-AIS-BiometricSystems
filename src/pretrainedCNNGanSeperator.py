@@ -10,6 +10,7 @@ import random
 random.seed(42)
 torch.manual_seed(42)
 
+
 def main():
     data_loader = GanDataLoader()
 
@@ -40,14 +41,14 @@ def main():
         dataset = data_loader.load_data(use_image_types=model_trained_types, dataset_name=dataset_name + '/train')
         print(len(dataset))
         model = GanClassifier(num_epochs=5,
-                                 learning_rate=0.0001,
-                                 batch_size=16,
-                                 folds=3,
-                                 model_name=model_name,
-                                 dataset_name=dataset_name,
-                                 model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
-                                 loss_function=nn.CrossEntropyLoss(),
-                                 num_image_channels=3)
+                              learning_rate=0.0001,
+                              batch_size=16,
+                              folds=3,
+                              model_name=model_name,
+                              dataset_name=dataset_name,
+                              model=models.resnet18(weights=models.ResNet18_Weights.DEFAULT),
+                              loss_function=nn.CrossEntropyLoss(),
+                              num_image_channels=3)
 
         model.train(dataset)
         model.save_losses()

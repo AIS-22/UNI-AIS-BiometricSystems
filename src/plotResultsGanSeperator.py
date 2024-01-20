@@ -20,8 +20,11 @@ def plot_confusion_matrix(dataset_name):
             file = filename.split('.')[0]
 
             # load dic from file
-            #conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
-            conf_matrix = pd.read_csv(f'results/{dataset_name}/conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv', index_col=0, header=0, sep=',', quotechar='"')
+            # conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
+            conf_matrix = pd.read_csv(f"""results/
+                                      {dataset_name}/
+                                      conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv""",
+                                      index_col=0, header=0, sep=',', quotechar='"')
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)
             sn.heatmap(conf_matrix, annot=True, cmap='Blues', fmt=".0f", annot_kws={'fontsize': 20})
@@ -54,13 +57,11 @@ def plot_loss_results(dataset_name):
 
 def main():
     datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
-    #datasets = ['mixed']
-    #datasets = ['SCUT']
     for dataset_name in datasets:
         print('Plotting results for ' + dataset_name)
         print_accuracy(dataset_name)
         plot_confusion_matrix(dataset_name)
-        #plot_loss_results(dataset_name)
+        # plot_loss_results(dataset_name)
 
 
 if __name__ == '__main__':
