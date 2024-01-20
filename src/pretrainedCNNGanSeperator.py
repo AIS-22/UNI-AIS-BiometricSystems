@@ -15,13 +15,13 @@ def main():
 
     # options = [model_name, dataset_name]
     options = [
-        ([VeinImageType.SYNTHETIC_CYCLE, 
-          VeinImageType.SYNTHETIC_DIST, 
-          VeinImageType.SYNTHETIC_DRIT, 
+        ([VeinImageType.SYNTHETIC_CYCLE,
+          VeinImageType.SYNTHETIC_DIST,
+          VeinImageType.SYNTHETIC_DRIT,
           VeinImageType.SYNTHETIC_STAR], "PLUS"),
-        ([VeinImageType.SYNTHETIC_CYCLE, 
-          VeinImageType.SYNTHETIC_DIST, 
-          VeinImageType.SYNTHETIC_DRIT, 
+        ([VeinImageType.SYNTHETIC_CYCLE,
+          VeinImageType.SYNTHETIC_DIST,
+          VeinImageType.SYNTHETIC_DRIT,
           VeinImageType.SYNTHETIC_STAR], "PROTECT"),
         ([VeinImageType.SYNTHETIC_CYCLE,
           VeinImageType.SYNTHETIC_DIST,

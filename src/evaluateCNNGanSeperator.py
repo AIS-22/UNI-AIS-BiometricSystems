@@ -10,13 +10,13 @@ def main():
     # options = [evaluation_types, (     information for model name:     )]
     # options = [evaluation_types, model_train_name , dataset_name, folder]
     options = [
-        ([VeinImageType.SYNTHETIC_CYCLE, 
-          VeinImageType.SYNTHETIC_DIST, 
-          VeinImageType.SYNTHETIC_DRIT, 
+        ([VeinImageType.SYNTHETIC_CYCLE,
+          VeinImageType.SYNTHETIC_DIST,
+          VeinImageType.SYNTHETIC_DRIT,
           VeinImageType.SYNTHETIC_STAR], "PLUS"),
-        ([VeinImageType.SYNTHETIC_CYCLE, 
-          VeinImageType.SYNTHETIC_DIST, 
-          VeinImageType.SYNTHETIC_DRIT, 
+        ([VeinImageType.SYNTHETIC_CYCLE,
+          VeinImageType.SYNTHETIC_DIST,
+          VeinImageType.SYNTHETIC_DRIT,
           VeinImageType.SYNTHETIC_STAR], "PROTECT"),
         ([VeinImageType.SYNTHETIC_CYCLE,
           VeinImageType.SYNTHETIC_DIST,
