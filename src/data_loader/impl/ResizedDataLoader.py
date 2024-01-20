@@ -10,6 +10,7 @@ from data_loader.AbstractDataLoader import AbstractDataLoader
 
 from CustomDataset import CustomDataset
 
+
 class ResizedDataLoader(AbstractDataLoader):
 
     def __init__(self):

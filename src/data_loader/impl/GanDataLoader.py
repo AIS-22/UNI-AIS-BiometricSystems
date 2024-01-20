@@ -10,6 +10,7 @@ from data_loader.AbstractDataLoader import AbstractDataLoader
 
 from CustomDataset import CustomDataset
 
+
 class GanDataLoader(AbstractDataLoader):
 
     def __init__(self):
@@ -47,6 +48,7 @@ class GanDataLoader(AbstractDataLoader):
         # Get filtered dataset
         dataset = CustomDataset(full_dataset, all_indexes)
         return dataset
+
 
 class GanDataLoaderResized(AbstractDataLoader):
 

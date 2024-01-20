@@ -284,6 +284,7 @@ def preprocess_scut_dataset():
                 cv2.imwrite(image_path, image)
     print("Preprocessed SCUT dataset")
 
+
 def resize_data_to_same_size(width=580, height=280):
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
     # copy the data folder and rename it to data_rs
@@ -306,6 +307,7 @@ def resize_data_to_same_size(width=580, height=280):
                     image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LANCZOS4)
                     cv2.imwrite(image_path, image)
         print(f"Resized {db} dataset to {width}x{height}")
+
 
 def resize_data():
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
@@ -365,8 +367,8 @@ def main():
     train_test_split()
     os.chdir("..")
     preprocess_scut_dataset()
-    resize_data_to_same_size() # create data_rs folder and resize data so all datasets match
-    resize_data() # resize data so one dataset matches internaly
+    resize_data_to_same_size()  # create data_rs folder and resize data so all datasets match
+    resize_data()  # resize data so one dataset matches internaly
 
 
 if __name__ == '__main__':
