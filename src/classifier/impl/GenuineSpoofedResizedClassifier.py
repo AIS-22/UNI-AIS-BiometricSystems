@@ -1,5 +1,7 @@
 from typing import Tuple
 
+import os
+
 import numpy as np
 import pandas as pd
 import torch
@@ -11,9 +13,6 @@ from torch.utils.data import DataLoader, Subset
 from torchvision.models.resnet import ResNet
 
 from classifier.AbstractClassifier import AbstractClassifier
-from CustomDataset import CustomDataset
-
-import torch.nn.functional as F
 
 
 def _get_device() -> str:
@@ -26,7 +25,7 @@ def _get_device() -> str:
     )
 
 
-class GanClassifier(AbstractClassifier):
+class SpoofedResizedClassifier(AbstractClassifier):
     def __init__(self,
                  num_epochs: int,
                  learning_rate: float,
@@ -56,6 +55,7 @@ class GanClassifier(AbstractClassifier):
         self.folds = folds
         self.batch_size = batch_size
         self.device = _get_device()
+        self.df_cm = pd.DataFrame()
 
     def train(self, dataset):
         # Create a KFold object
@@ -66,13 +66,13 @@ class GanClassifier(AbstractClassifier):
         self.num_output_nodes = len(dataset.classes)
 
         # This should change the input conv layer, maybe there is no need for defining the new image sizes
-        #self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.model.conv1 = nn.Conv2d(self.num_image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
         num_input_features = self.model.fc.in_features
         self.model.fc = nn.Linear(num_input_features, self.num_output_nodes)
         self.model.to(self.device)
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate, weight_decay=0.0001)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
         # Iterate over the folds
         for fold, (train_idx, test_idx) in enumerate(kfold.split(range(dataset_length))):
@@ -80,8 +80,8 @@ class GanClassifier(AbstractClassifier):
             print(f"Fold {fold + 1}:")
 
             # Create train and validation subsets
-            train_set = CustomDataset(dataset, train_idx)
-            test_set = CustomDataset(dataset, test_idx)
+            train_set = Subset(dataset, train_idx)
+            test_set = Subset(dataset, test_idx)
 
             # Create DataLoader for training and validation
             train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
@@ -97,9 +97,8 @@ class GanClassifier(AbstractClassifier):
             self.model.train()
             running_loss = 0.0
             for images, labels in train_loader:
-                images = images.to(self.device)
-                #labels = F.one_hot(labels, num_classes=self.num_output_nodes).to(torch.float32).to(self.device)
-                labels = labels.to(self.device)
+                labels[labels != 0] = 1
+                images, labels = images.to(self.device), labels.to(self.device)
 
                 self.optimizer.zero_grad()
                 outputs = self.model(images)
@@ -109,7 +108,7 @@ class GanClassifier(AbstractClassifier):
 
                 running_loss += loss.item() * images.size(0)
 
-            epoch_loss = running_loss / len(train_loader.dataset)
+            epoch_loss = running_loss / len(train_loader.dataset.indices)
             print(f'Train Epoch: {epoch + 1}, Loss: {epoch_loss:.4f}')
 
             self.model.eval()
@@ -118,6 +117,7 @@ class GanClassifier(AbstractClassifier):
             test_loss = 0
             with torch.no_grad():
                 for images, labels in test_loader:
+                    labels[labels != 0] = 1
                     images, labels = images.to(self.device), labels.to(self.device)
 
                     outputs = self.model(images)
@@ -127,7 +127,7 @@ class GanClassifier(AbstractClassifier):
                     correct += (predicted == labels).sum().item()
 
             accuracy = correct / total
-            test_loss /= len(test_loader.dataset)
+            test_loss /= len(test_loader.dataset.indices)
             print(f'Validation accuracy: {accuracy:.4f} loss: {test_loss} in epoch: {epoch + 1}')
             losses[epoch, 0] = epoch_loss
             losses[epoch, 1] = test_loss
@@ -145,18 +145,18 @@ class GanClassifier(AbstractClassifier):
 
         with torch.no_grad():
             for images, labels in val_loader:
+                labels[labels != 0] = 1
                 images, labels = images.to(self.device), labels.to(self.device)
-                #labels = F.one_hot(labels, num_classes=self.num_output_nodes).to(torch.float32).to(self.device)
 
                 outputs = self.model(images)
-                predicted = torch.max(outputs.data, 1)[1]
+                _, predicted = torch.max(outputs.data, 1)
                 y_pred.extend(predicted.tolist())
                 y_true.extend(labels.tolist())
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
         cm = confusion_matrix(y_true, y_pred)
-        df_cm = pd.DataFrame(cm, index=val_set.classes, columns=val_set.classes)
+        df_cm = pd.DataFrame(confusion_matrix, index=val_set.classes, columns=val_set.classes)
 
         accuracy = correct / total
         precision, recall, f1_score, _ = precision_recall_fscore_support(y_true, y_pred, average='weighted')
@@ -167,7 +167,7 @@ class GanClassifier(AbstractClassifier):
         print(f'F1-score: {f1_score:.4f}')
 
         self.accuracy = accuracy
-        self.confusion_matrix = confusion_matrix
+        self.confusion_matrix = cm
         self.df_cm = df_cm
 
     def save_model(self):
@@ -179,6 +179,7 @@ class GanClassifier(AbstractClassifier):
         num_ftrs = self.model.fc.in_features
         self.num_output_nodes = len(dataset.classes)
         self.model.fc = nn.Linear(num_ftrs, self.num_output_nodes)
+        print(f'Number of output nodes: {self.num_output_nodes}')
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
         self.model.load_state_dict(torch.load(model_path))
@@ -194,14 +195,19 @@ class GanClassifier(AbstractClassifier):
         # Get average
         losses /= self.folds
 
-        np.save(f'results/{self.dataset_name}/losses_{self.model_name}.npy', losses)
+        np.save(f'results/{self.dataset_name}/losses_resized_{self.model_name}.npy', losses)
         print('Losses saved')
 
-    def save_val_accuracy(self):
-        np.save(f'results/{self.dataset_name}/accuracy_{self.model_name}.npy', self.accuracy)
+    def save_val_accuracy(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
+        if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
+            os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
+        np.save(f"results/mixed/m_{model_ds}_e_{eval_ds}/accuracy_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.npy", self.accuracy)
+        
         print('Accuracy saved')
 
-    def save_val_confusion_matrix(self):
-        np.save(f'results/{self.dataset_name}/conf_matrix_{self.model_name}.npy', self.confusion_matrix)
-        self.df_cm.to_csv(f'results/{self.dataset_name}/conf_matrix_{self.model_name}.csv')
+    def save_val_confusion_matrix(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
+        #np.save(f"results/mixed/conf_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.npy", self.confusion_matrix)
+        if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
+            os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
+        self.df_cm.to_csv(f"results/mixed/m_{model_ds}_e_{eval_ds}/conf_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}.csv")
         print('Confusion matrix saved')
