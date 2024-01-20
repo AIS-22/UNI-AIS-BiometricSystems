@@ -9,7 +9,7 @@ from VeinImageType import VeinImageType
 from data_loader.AbstractDataLoader import AbstractDataLoader
 
 
-class PlusDataLoader(AbstractDataLoader):
+class CustomDataLoader(AbstractDataLoader):
 
     def __init__(self):
         super().__init__()

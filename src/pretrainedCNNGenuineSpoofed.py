@@ -2,12 +2,12 @@ from torch import nn
 from torchvision import models
 
 from VeinImageType import VeinImageType
-from classifier.impl.ResnetClassifier import ResnetClassifier
-from data_loader.impl.PlusDataLoader import PlusDataLoader
+from classifier.impl.GenuineSpoofedClassifier import ResnetClassifier
+from data_loader.impl.GenuineSpoofedDataLoader import CustomDataLoader
 
 
 def main():
-    data_loader = PlusDataLoader()
+    data_loader = CustomDataLoader()
 
     # options = [model_name, dataset_name, folder]
     options = [

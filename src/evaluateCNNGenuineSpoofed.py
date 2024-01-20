@@ -2,8 +2,8 @@ from torch import nn
 from torchvision import models
 
 from VeinImageType import VeinImageType
-from classifier.impl.ResnetClassifier import ResnetClassifier
-from data_loader.impl.PlusDataLoader import PlusDataLoader
+from classifier.impl.GenuineSpoofedClassifier import ResnetClassifier
+from data_loader.impl.GenuineSpoofedDataLoader import CustomDataLoader
 
 
 def main():
@@ -90,7 +90,7 @@ def main():
                                  num_image_channels=3)
 
         model.load_model("models/" + dataset_name + "/" + model_name)
-        data_loader = PlusDataLoader()
+        data_loader = CustomDataLoader()
 
         dataset = data_loader.load_data(use_image_types=eval_types, dataset_name=dataset_name + '/val', folder=folder)
 
