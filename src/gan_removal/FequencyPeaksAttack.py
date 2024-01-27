@@ -23,7 +23,8 @@ def determine_peak_fingerprint(folder):
     mean_dct_genuine = np.zeros(cv2.imread(filenames_genuine[0], cv2.IMREAD_GRAYSCALE).shape)
     for filename in filenames_genuine:
         image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-        mean_dct_genuine += np.log(np.abs(cv2.dct(np.float32(image))))
+        # add 1e-10 to avoid division by zero
+        mean_dct_genuine += np.log(np.abs(cv2.dct(np.float32(image))) + 1e-10)
 
     mean_dct_genuine /= len(filenames_genuine)
 
@@ -31,7 +32,8 @@ def determine_peak_fingerprint(folder):
     mean_dct_gan = np.zeros(cv2.imread(filenames_gan[0], cv2.IMREAD_GRAYSCALE).shape)
     for filename in filenames_gan:
         image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-        mean_dct_gan += np.log(np.abs(cv2.dct(np.float32(image))))
+        # add 1e-10 to avoid division by zero
+        mean_dct_gan += np.log(np.abs(cv2.dct(np.float32(image))) + 1e-10)
 
     mean_dct_gan /= len(filenames_gan)
 
