@@ -45,10 +45,11 @@ def determine_peak_fingerprint(folder):
 def apply_attack(s=100, t=0.1):
     for ds in datasets:
         os.chdir(f"{ds}/val_peak")
-        # remove genuine foler
-        shutil.rmtree("genuine")
-        shutil.rmtree("spoofed")
-        for method in os.listdir():
+        # remove genuine and spoofed from removing fingerprints
+        directories = os.listdir()
+        directories.remove("genuine")
+        directories.remove("spoofed")
+        for method in directories:
             os.chdir(method)
             fingerprint_peak = determine_peak_fingerprint(method)
             # scale F_p to [0,1]

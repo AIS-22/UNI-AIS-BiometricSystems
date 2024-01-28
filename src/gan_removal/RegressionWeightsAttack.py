@@ -38,10 +38,11 @@ def determine_regression_parameter(folder, alpha=0.1, max_iter=1000, tol=0.1):
 def apply_attack(s=50):
     for ds in datasets:
         os.chdir(f"{ds}/val_reg")
-        # remove genuine foler
-        shutil.rmtree("genuine")
-        shutil.rmtree("spoofed")
-        for method in os.listdir():
+        # remove genuine and spoofed from removing fingerprints
+        directories = os.listdir()
+        directories.remove("genuine")
+        directories.remove("spoofed")
+        for method in directories:
             os.chdir(method)
             fingerprint_regression_weights = s * determine_regression_parameter(method)
             # scale fingerprint_regression_weights to [-1,1]

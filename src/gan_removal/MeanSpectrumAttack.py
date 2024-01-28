@@ -43,10 +43,11 @@ def determine_mean_fingerprint(folder):
 def apply_attack(s=0.5):
     for ds in datasets:
         os.chdir(f"{ds}/val_mean")
-        # remove genuine foler
-        shutil.rmtree("genuine")
-        shutil.rmtree("spoofed")
-        for method in os.listdir():
+        # remove genuine and spoofed from removing fingerprints
+        directories = os.listdir()
+        directories.remove("genuine")
+        directories.remove("spoofed")
+        for method in directories:
             os.chdir(method)
             fingerprint_mean = determine_mean_fingerprint(method)
             for img in glob.glob("*"):
