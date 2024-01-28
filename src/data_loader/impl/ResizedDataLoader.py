@@ -19,7 +19,7 @@ class ResizedDataLoader(AbstractDataLoader):
     def load_data(self, use_image_types: List[VeinImageType], dataset_name,
                   transform=transforms.ToTensor(), folder='') -> Subset[Any]:
 
-        root_path = '../data_rs/' + dataset_name + '/'
+        root_path = 'data_rs/' + dataset_name + '/'
         # Load the entire dataset
         full_dataset = torchvision.datasets.ImageFolder(root=root_path, transform=transform)
         indexes_list = []
