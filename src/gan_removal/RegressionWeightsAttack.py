@@ -18,12 +18,12 @@ def copy_images():
         os.chdir("..")
 
 
-def determine_regression_parameter(folder):
+def determine_regression_parameter(folder, alpha=0.1, max_iter=1000, tol=0.1):
     filenames_genuine = glob.glob('../../train/genuine/*')
     filenames_gan = glob.glob(f'../../train/{folder}/*')
 
     # create mean of dct coefficients genuine images
-    lasso_model = Lasso(alpha=0.1)
+    lasso_model = Lasso(alpha=alpha, max_iter=max_iter, tol=tol)
     for filenames_gan in filenames_gan:
         for filename in random.sample(filenames_genuine, 10):
             image_gen = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
@@ -32,7 +32,7 @@ def determine_regression_parameter(folder):
             dct_result_gan = cv2.dct(np.float32(image_gan))
             lasso_model.fit(dct_result_gan, dct_result_gen)
 
-    return lasso_model.coef_
+    return np.resize(lasso_model.coef_,image_gen.shape)
 
 
 def apply_attack(s=50):
@@ -60,6 +60,6 @@ def apply_attack(s=50):
 
 
 if __name__ == '__main__':
-    os.chdir("data_rs")
+    os.chdir("data")
     copy_images()
     apply_attack()

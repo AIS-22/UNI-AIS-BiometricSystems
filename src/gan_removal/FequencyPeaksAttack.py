@@ -72,6 +72,6 @@ def apply_attack(s=100, t=0.1):
 
 
 if __name__ == '__main__':
-    os.chdir("data_rs")
+    os.chdir("data")
     copy_images()
     apply_attack()
