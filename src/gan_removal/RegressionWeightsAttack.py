@@ -19,7 +19,7 @@ def copy_images():
 
 
 def determine_regression_parameter(folder):
-    filenames_genuine = glob.glob(f'../../train/genuine/*')
+    filenames_genuine = glob.glob('../../train/genuine/*')
     filenames_gan = glob.glob(f'../../train/{folder}/*')
 
     # create mean of dct coefficients genuine images
@@ -32,8 +32,7 @@ def determine_regression_parameter(folder):
             dct_result_gan = cv2.dct(np.float32(image_gan))
             lasso_model.fit(dct_result_gan, dct_result_gen)
 
-    F_r = lasso_model.coef_
-    return F_r
+    return lasso_model.coef_
 
 
 def apply_attack(s=50):
@@ -44,13 +43,13 @@ def apply_attack(s=50):
         shutil.rmtree("spoofed")
         for method in os.listdir():
             os.chdir(method)
-            F_r = s * determine_regression_parameter(method)
-            # scale F_r to [-1,1]
-            F_r = 2 * (F_r - np.min(F_r)) / (np.max(F_r) - np.min(F_r)) - 1
+            fingerprint_regression_weights = s * determine_regression_parameter(method)
+            # scale fingerprint_regression_weights to [-1,1]
+            fingerprint_regression_weights = 2 * (fingerprint_regression_weights - np.min(fingerprint_regression_weights)) / (np.max(fingerprint_regression_weights) - np.min(fingerprint_regression_weights)) - 1
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))
-                modified_coeffs = dct_result * (1 - F_r)
+                modified_coeffs = dct_result * (1 - fingerprint_regression_weights)
                 # store the new image in removal folder
                 reconstructed_image = cv2.idct(modified_coeffs)
                 cv2.imwrite(img, reconstructed_image)

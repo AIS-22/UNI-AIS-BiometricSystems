@@ -16,7 +16,7 @@ def copy_images():
 
 
 def determine_mean_fingerprint(folder):
-    filenames_genuine = glob.glob(f'../../train/genuine/*')
+    filenames_genuine = glob.glob('../../train/genuine/*')
     filenames_gan = glob.glob(f'../../train/{folder}/*')
 
     # create mean of dct coefficients genuine images
@@ -36,8 +36,8 @@ def determine_mean_fingerprint(folder):
     mean_dct_gan /= len(filenames_gan)
 
     # Needs to be repeated for each gan class and applied on corresponding val images!!!!
-    F_m = mean_dct_gan - mean_dct_genuine
-    return F_m
+    fingerprint_mean = mean_dct_gan - mean_dct_genuine
+    return fingerprint_mean
 
 
 def apply_attack(s=0.5):
@@ -48,11 +48,11 @@ def apply_attack(s=0.5):
         shutil.rmtree("spoofed")
         for method in os.listdir():
             os.chdir(method)
-            F_m = determine_mean_fingerprint(method)
+            fingerprint_mean = determine_mean_fingerprint(method)
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))
-                modified_coeffs = dct_result - (s * F_m)
+                modified_coeffs = dct_result - (s * fingerprint_mean)
                 # store the new image in removal folder
                 reconstructed_image = cv2.idct(modified_coeffs)
                 cv2.imwrite(img, reconstructed_image)

@@ -16,7 +16,7 @@ def copy_images():
 
 
 def determine_peak_fingerprint(folder):
-    filenames_genuine = glob.glob(f'../../train/genuine/*')
+    filenames_genuine = glob.glob('../../train/genuine/*')
     filenames_gan = glob.glob(f'../../train/{folder}/*')
 
     # create mean of dct coeffiecents of genuine images
@@ -38,8 +38,8 @@ def determine_peak_fingerprint(folder):
     mean_dct_gan /= len(filenames_gan)
 
     # Needs to be repeated for each gan class and applied on corresponding val images!!!!
-    F_p = np.exp(mean_dct_gan - mean_dct_genuine)
-    return F_p
+    fingerpint_peak = np.exp(mean_dct_gan - mean_dct_genuine)
+    return fingerpint_peak
 
 
 def apply_attack(s=100, t=0.1):
@@ -50,18 +50,18 @@ def apply_attack(s=100, t=0.1):
         shutil.rmtree("spoofed")
         for method in os.listdir():
             os.chdir(method)
-            F_p = determine_peak_fingerprint(method)
+            fingerprint_peak = determine_peak_fingerprint(method)
             # scale F_p to [0,1]
-            F_p = (F_p - np.min(F_p)) / (np.max(F_p) - np.min(F_p))
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (np.max(fingerprint_peak) - np.min(fingerprint_peak))
             # set values under threshold t to zero
-            F_p[F_p < t] = 0
-            F_p *= s
+            fingerprint_peak[fingerprint_peak < t] = 0
+            fingerprint_peak *= s
             # scale F_p again to [0,1]
-            F_p = (F_p - np.min(F_p)) / (np.max(F_p) - np.min(F_p))
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (np.max(fingerprint_peak) - np.min(fingerprint_peak))
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))
-                modified_coeffs = dct_result * (1 - F_p)
+                modified_coeffs = dct_result * (1 - fingerprint_peak)
                 # store the new image in removal folder
                 reconstructed_image = cv2.idct(modified_coeffs)
                 cv2.imwrite(img, reconstructed_image)
