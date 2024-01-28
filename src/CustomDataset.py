@@ -15,6 +15,8 @@ class CustomDataset(Dataset):
                 if [k for k, v in self.class_to_idx.items() if v == s[1]][0] not in new_classes:
                     # add the class names from class_to_idx to the newClasses list
                     new_classes.append([k for k, v in self.class_to_idx.items() if v == s[1]][0])
+            # sort the new classes
+            new_classes.sort()
             self.classes = new_classes
             if len(self.classes) == 0:
                 raise (RuntimeError("Dataset classes not found."))
