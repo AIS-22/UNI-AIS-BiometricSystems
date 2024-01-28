@@ -14,22 +14,29 @@ def print_accuracy(dataset_name):
             print('\n')
 
 
-def plot_confusion_matrix(dataset_name):
-    for filename in os.listdir('results/' + dataset_name):
-        if 'conf_matrix' in filename and '.csv' in filename:
-            file = filename.split('.')[0]
-
-            # load dic from file
-            # conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
-            conf_matrix = pd.read_csv(f"""results/{dataset_name}/conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv""",
-                                      index_col=0, header=0, sep=',', quotechar='"')
-            plt.figure(figsize=(15, 10))
-            sn.set(font_scale=1.4)
-            sn.heatmap(conf_matrix, annot=True, cmap='Blues', fmt=".0f", annot_kws={'fontsize': 20})
-            plt.xticks(rotation=90)
-            plt.savefig('plots/' + dataset_name + '/' + file + '.png')
-            print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
-            plt.close()
+def plot_confusion_matrix():
+    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
+    # i have 4 dataset names and wan to get a list where each dataset is combined with each other
+    # so i get a list of 16 elements
+    for model_ds in datasets:
+        for eval_ds in datasets:
+            for filename in os.listdir(f'results/mixed/m_{model_ds}_e_{eval_ds}'):
+                if 'conf_matrix' in filename and 'ganSeperator' in filename:
+                    cm = pd.read_csv(
+                        f"""results/mixed/m_{model_ds}_e_{eval_ds}/conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""", index_col=0, header=0, sep=',', quotechar='"')
+                    plt.figure(figsize=(15, 10))
+                    sn.set(font_scale=1.4)
+                    sn.heatmap(cm,
+                               annot=True,
+                               cmap='Blues',
+                               fmt=".0f",
+                               annot_kws={'fontsize': 20})
+                    plt.xticks(rotation=45)
+                    plt.savefig(
+                        f'plots/mixed/ganSeperator/cm_resized_model_{model_ds}_eval_{eval_ds}_ganSeperator.png')
+                    print('Confusion Matrix Plot saved as: ' +
+                          f'plots/mixed/ganSeperator/cm_resized_model_{model_ds}_eval_{eval_ds}_ganSeperator.png')
+                    plt.close()
 
 
 def plot_loss_results(dataset_name):
@@ -54,11 +61,11 @@ def plot_loss_results(dataset_name):
 
 
 def main():
-    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
+    datasets = ['mixed']
     for dataset_name in datasets:
         print('Plotting results for ' + dataset_name)
         # print_accuracy(dataset_name)
-        plot_confusion_matrix(dataset_name)
+        plot_confusion_matrix()
         # plot_loss_results(dataset_name)
 
 

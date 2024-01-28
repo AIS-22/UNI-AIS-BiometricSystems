@@ -194,8 +194,9 @@ class SpoofedResizedClassifier(AbstractClassifier):
 
         # Get average
         losses /= self.folds
+        df_losses = pd.DataFrame(losses, columns=['train_loss', 'val_loss'])
 
-        np.save(f'results/{self.dataset_name}/losses_resized_{self.model_name}.npy', losses)
+        df_losses.to_csv(f'results/{self.dataset_name}/losses_resized_{self.model_name}.csv')
         print('Losses saved')
 
     def save_val_accuracy(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
