@@ -156,7 +156,7 @@ class SpoofedResizedClassifier(AbstractClassifier):
                 correct += (predicted == labels).sum().item()
 
         cm = confusion_matrix(y_true, y_pred)
-        df_cm = pd.DataFrame(confusion_matrix, index=val_set.classes, columns=val_set.classes)
+        df_cm = pd.DataFrame(cm, index=val_set.classes, columns=val_set.classes)
 
         accuracy = correct / total
         precision, recall, f1_score, _ = precision_recall_fscore_support(y_true, y_pred, average='weighted')
@@ -208,7 +208,7 @@ class SpoofedResizedClassifier(AbstractClassifier):
                                                    }_{eval_ds_folder}.npy""", self.accuracy)
         print('Accuracy saved')
 
-    def save_val_confusion_matrix(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
+    def  (self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
         if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
             os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
         self.df_cm.to_csv(f"""results/mixed/m_{model_ds}_e_{eval_ds}/
