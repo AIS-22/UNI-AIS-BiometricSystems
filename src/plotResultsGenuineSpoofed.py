@@ -51,6 +51,18 @@ def plot_confusion_matrix(dataset_name):
                 plt.savefig('plots/' + dataset_name + '/' + file + '.png')
                 print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
                 plt.close()
+            elif 'conf_matrix' in filename and '.csv' in filename:
+                file = filename.split('.')[0]
+                cm = pd.read_csv(f'results/mixed/{filename}', index_col=0, header=0, sep=',')
+                plt.figure(figsize=(15, 10))
+                sn.set(font_scale=1.4)
+                sn.heatmap(cm,
+                           annot=True,
+                           cmap='Blues',
+                           fmt=".0f",
+                           annot_kws={'fontsize': 20})
+                plt.xticks(rotation=45)
+                plt.savefig(f'plots/{dataset_name}/{file}.png')
 
 
 def plot_loss_results(dataset_name):
