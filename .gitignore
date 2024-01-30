@@ -164,5 +164,9 @@ cython_debug/
 .DS_Store
 
 # images
-data_prepared/ 
 data/
+*.zip
+data_prepared/
+*.pt
+*.npy
+*.png
