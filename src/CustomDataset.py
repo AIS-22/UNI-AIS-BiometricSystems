@@ -33,6 +33,7 @@ class CustomDataset(Dataset):
                  self.class_to_idx[[k for k, v in dataset.class_to_idx.items() if v == s[1]][0]])
                 for s in self.samples]
         else:
+            classes.sort()
             self.classes = classes
             # update class_to_idx
             self.class_to_idx = {k: v for v, k in enumerate(self.classes)}
