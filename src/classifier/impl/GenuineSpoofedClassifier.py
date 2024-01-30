@@ -1,8 +1,9 @@
 from typing import Tuple
 
 import numpy as np
+import pandas as pd
 import torch
-from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
 from sklearn.model_selection import KFold
 from torch import nn, optim
 from torch.nn.modules.loss import Module
@@ -49,7 +50,8 @@ class ResnetClassifier(AbstractClassifier):
         self.num_image_channels = num_image_channels
         self.validation_loss = []
         self.accuracy = float
-        self.confusion_matrix = []
+        self.cm_np = []
+        self.df_cm = pd.DataFrame()
         self.folds = folds
         self.batch_size = batch_size
         self.device = _get_device()
@@ -137,6 +139,8 @@ class ResnetClassifier(AbstractClassifier):
         total = 0
         all_preds = []
         all_labels = []
+        y_pred = []
+        y_true = []
         confusion_matrix = np.zeros((2, 2))
         val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
 
@@ -147,6 +151,8 @@ class ResnetClassifier(AbstractClassifier):
 
                 outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
+                y_pred.extend(predicted.tolist())
+                y_true.extend(labels.tolist())
                 total += labels.size(0)  # Update the total count of processed samples
                 correct += (predicted == labels).sum().item()
 
@@ -155,6 +161,9 @@ class ResnetClassifier(AbstractClassifier):
 
                 all_preds.extend(predicted.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
+
+        cf = confusion_matrix(y_true, y_pred)
+        self.df_cm = pd.DataFrame(cf, index=val_set.classes, columns=val_set.classes)
 
         accuracy = correct / total
         precision, recall, f1_score, _ = precision_recall_fscore_support(all_labels, all_preds, average='weighted')
@@ -165,7 +174,7 @@ class ResnetClassifier(AbstractClassifier):
         print(f'F1-score: {f1_score:.4f}')
 
         self.accuracy = accuracy
-        self.confusion_matrix = confusion_matrix
+        self.cm_np = confusion_matrix
 
     def save_model(self):
         self.model.to('cpu')
@@ -193,10 +202,15 @@ class ResnetClassifier(AbstractClassifier):
         np.save('results/' + self.dataset_name + '/losses_' + self.model_name + '.npy', losses)
         print('Losses saved')
 
-    def save_val_accuracy(self):
-        np.save('results/' + self.dataset_name + '/accuracy_' + self.model_name + '.npy', self.accuracy)
+    def save_val_accuracy(self, name=None):
+        if name is None:
+            name = self.model_name
+        np.save('results/' + self.dataset_name + '/accuracy_' + name + '.npy', self.accuracy)
         print('Accuracy saved')
 
-    def save_val_confusion_matrix(self):
-        np.save('results/' + self.dataset_name + '/conf_matrix_' + self.model_name + '.npy', self.confusion_matrix)
+    def save_val_confusion_matrix(self, name=None):
+        if name is None:
+            name = self.model_name
+        np.save('results/' + self.dataset_name + '/conf_matrix_' + name + '.npy', self.cm_np)
+        self.df_cm.to_csv('results/' + self.dataset_name + '/conf_matrix_' + name + '.csv')
         print('Confusion matrix saved')

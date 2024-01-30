@@ -53,6 +53,7 @@ class GanClassifier(AbstractClassifier):
         self.val_loss = pd.DataFrame()
         self.accuracy = pd.DataFrame()
         self.confusion_matrix = []
+        self.df_cm = pd.DataFrame()
         self.folds = folds
         self.batch_size = batch_size
         self.device = _get_device()

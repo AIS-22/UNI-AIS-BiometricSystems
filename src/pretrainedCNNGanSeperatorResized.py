@@ -44,10 +44,10 @@ def main():
 
         dataset = data_loader.load_data(
             use_image_types=model_trained_types, dataset_name=dataset_name + '/train', transform=preprocess)
-        model = GanClassifierResized(num_epochs=50,
-                                     learning_rate=0.0001,
+        model = GanClassifierResized(num_epochs=5,
+                                     learning_rate=0.00001,
                                      batch_size=16,
-                                     folds=5,
+                                     folds=3,
                                      model_name=model_name,
                                      dataset_name=dataset_name,
                                      model=models.resnet18(
