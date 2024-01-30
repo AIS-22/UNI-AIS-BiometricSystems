@@ -208,7 +208,7 @@ class SpoofedResizedClassifier(AbstractClassifier):
                                                    }_{eval_ds_folder}.npy""", self.accuracy)
         print('Accuracy saved')
 
-    def  (self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
+    def save_val_confusion_matrix(self, eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types):
         if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
             os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
         self.df_cm.to_csv(f"""results/mixed/m_{model_ds}_e_{eval_ds}/

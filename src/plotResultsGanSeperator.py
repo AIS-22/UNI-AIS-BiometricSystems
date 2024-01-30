@@ -16,12 +16,11 @@ def print_accuracy(dataset_name):
 
 def plot_confusion_matrix(dataset_name):
     for filename in os.listdir('results/' + dataset_name):
-        if 'conf_matrix' in filename and '.csv' in filename:
+        if 'conf_matrix' in filename and '.csv' in filename and 'ganSeperator' in filename:
             file = filename.split('.')[0]
 
-            # load dic from file
-            # conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
-            conf_matrix = pd.read_csv(f"""results/{dataset_name}/conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv""",
+            conf_matrix = pd.read_csv(f"""results/{dataset_name}/
+                                      conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv""",
                                       index_col=0, header=0, sep=',', quotechar='"')
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)

@@ -58,7 +58,7 @@ class GanDataLoaderResized(AbstractDataLoader):
     def load_data(self, use_image_types: List[VeinImageType], dataset_name,
                   transform=transforms.ToTensor()) -> Subset[Any]:
 
-        root_path = f'data/{dataset_name}/'
+        root_path = f'data_rs/{dataset_name}/'
         # Load the entire dataset
         full_dataset = torchvision.datasets.ImageFolder(root=root_path, transform=transform)
         sub_folders = full_dataset.classes

@@ -1,7 +1,6 @@
 from torch import nn
 from torchvision import models
 from torchvision.transforms import transforms
-from PIL import Image
 
 from VeinImageType import VeinImageType
 from classifier.impl.GanClassifier import GanClassifierResized

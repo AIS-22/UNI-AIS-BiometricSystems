@@ -141,7 +141,7 @@ class ResnetClassifier(AbstractClassifier):
         all_labels = []
         y_pred = []
         y_true = []
-        confusion_matrix = np.zeros((2, 2))
+        cm_np = np.zeros((2, 2))
         val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
 
         with torch.no_grad():
@@ -157,13 +157,13 @@ class ResnetClassifier(AbstractClassifier):
                 correct += (predicted == labels).sum().item()
 
                 for t, p in zip(labels.view(-1), predicted.view(-1)):
-                    confusion_matrix[t.long(), p.long()] += 1
+                    cm_np[t.long(), p.long()] += 1
 
                 all_preds.extend(predicted.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
 
-        cf = confusion_matrix(y_true, y_pred)
-        self.df_cm = pd.DataFrame(cf, index=val_set.classes, columns=val_set.classes)
+        cm = confusion_matrix(y_true, y_pred)
+        self.df_cm = pd.DataFrame(cm, index=val_set.classes, columns=val_set.classes)
 
         accuracy = correct / total
         precision, recall, f1_score, _ = precision_recall_fscore_support(all_labels, all_preds, average='weighted')
@@ -174,7 +174,7 @@ class ResnetClassifier(AbstractClassifier):
         print(f'F1-score: {f1_score:.4f}')
 
         self.accuracy = accuracy
-        self.cm_np = confusion_matrix
+        self.cm_np = cm_np
 
     def save_model(self):
         self.model.to('cpu')

@@ -21,9 +21,14 @@ def plot_confusion_matrix():
     for model_ds in datasets:
         for eval_ds in datasets:
             for filename in os.listdir(f'results/mixed/m_{model_ds}_e_{eval_ds}'):
-                if 'conf_matrix' in filename and 'ganSeperator' in filename:
+                if 'conf_matrix' in filename and 'ganSeperator_resized' in filename and '.csv' in filename:
                     cm = pd.read_csv(
-                        f"""results/mixed/m_{model_ds}_e_{eval_ds}/conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""", index_col=0, header=0, sep=',', quotechar='"')
+                        f"""results/mixed/m_{model_ds}_e_{eval_ds}/
+                        conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""",
+                        index_col=0,
+                        header=0,
+                        sep=',',
+                        quotechar='"')
                     plt.figure(figsize=(15, 10))
                     sn.set(font_scale=1.4)
                     sn.heatmap(cm,
