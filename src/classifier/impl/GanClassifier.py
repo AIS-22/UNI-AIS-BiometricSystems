@@ -375,18 +375,18 @@ class GanClassifierResized(AbstractClassifier):
         print('Losses saved')
 
     def save_val_accuracy(self, eval_ds, model_ds):
-        if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
-            os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
+        if not os.path.exists(f"results/mixed/ganSeperator/"):
+            os.makedirs(f"results/mixed/ganSeperator/")
         np.save(
-            f"""results/mixed/m_{model_ds}_e_{eval_ds}/
+            f"""results/mixed/ganSeperator/
             accuracy_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.npy""",
             self.accuracy)
         print('Accuracy saved')
 
     def save_val_confusion_matrix(self, eval_ds, model_ds):
-        if not os.path.exists(f"results/mixed/m_{model_ds}_e_{eval_ds}/"):
-            os.makedirs(f"results/mixed/m_{model_ds}_e_{eval_ds}/")
+        if not os.path.exists(f"results/mixed/ganSeperator/"):
+            os.makedirs(f"results/mixed/ganSeperator/")
         self.df_cm.to_csv(
-            f"""results/mixed/m_{model_ds}_e_{eval_ds}/
+            f"""results/mixed/ganSeperator/
             conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""")
         print('Confusion matrix saved')
