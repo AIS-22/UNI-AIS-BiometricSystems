@@ -15,10 +15,9 @@ def print_accuracy(dataset_name):
 
 
 def plot_confusion_matrix():
-    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
     # i have 4 dataset names and wan to get a list where each dataset is combined with each other
     # so i get a list of 16 elements
-    for filename in os.listdir(f'results/mixed/ganSeperator'):
+    for filename in os.listdir('results/mixed/ganSeperator'):
         if 'conf_matrix' in filename and 'ganSeperator_resized' in filename and '.csv' in filename:
             cm = pd.read_csv(
                 f"results/mixed/ganSeperator/{filename}",
@@ -35,9 +34,11 @@ def plot_confusion_matrix():
                        annot_kws={'fontsize': 20})
             plt.xticks(rotation=45)
             plt.savefig(
-                f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
+                f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
+                f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
             print('Confusion Matrix Plot saved as: ' +
-                  f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
+                  f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
+                  f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
             plt.close()
 
 
