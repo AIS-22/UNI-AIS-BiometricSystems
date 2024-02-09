@@ -53,7 +53,7 @@ def plot_confusion_matrix(dataset_name):
                 plt.close()
             elif 'conf_matrix' in filename and '.csv' in filename:
                 file = filename.split('.')[0]
-                cm = pd.read_csv(f'results/mixed/{filename}', index_col=0, header=0, sep=',')
+                cm = pd.read_csv(f'results/{dataset_name}/{filename}', index_col=0, header=0, sep=',')
                 plt.figure(figsize=(15, 10))
                 sn.set(font_scale=1.4)
                 sn.heatmap(cm,

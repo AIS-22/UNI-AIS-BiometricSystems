@@ -1,5 +1,6 @@
 from torch import nn
 from torchvision import models
+from torchvision.transforms import transforms
 
 from VeinImageType import VeinImageType
 from classifier.impl.GanClassifier import GanClassifier
@@ -27,6 +28,13 @@ def main():
           VeinImageType.SYNTHETIC_DRIT,
           VeinImageType.SYNTHETIC_STAR], "SCUT")
     ]
+
+    preprocess = transforms.Compose([
+        # transforms.Resize(256, interpolation=Image.LANCZOS),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
     for eval_types, dataset_name in options:
         print(f"Evaluate model for {dataset_name}")
 
@@ -44,7 +52,7 @@ def main():
 
         data_loader = GanDataLoader()
         dataset = data_loader.load_data(
-            use_image_types=eval_types, dataset_name=f'{dataset_name}/val')
+            use_image_types=eval_types, dataset_name=f'{dataset_name}/val', transform=preprocess)
 
         model.load_model(f"models/{dataset_name}/{model_name}", dataset)
 
