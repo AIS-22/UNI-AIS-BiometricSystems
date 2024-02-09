@@ -32,7 +32,7 @@ def determine_regression_parameter(folder, alpha=0.1, max_iter=1000, tol=0.1):
             dct_result_gan = cv2.dct(np.float32(image_gan))
             lasso_model.fit(dct_result_gan, dct_result_gen)
 
-    return np.resize(lasso_model.coef_,image_gen.shape)
+    return np.resize(lasso_model.coef_, image_gen.shape)
 
 
 def apply_attack(s=50):
@@ -46,7 +46,9 @@ def apply_attack(s=50):
             os.chdir(method)
             fingerprint_regression_weights = s * determine_regression_parameter(method)
             # scale fingerprint_regression_weights to [-1,1]
-            fingerprint_regression_weights = 2 * (fingerprint_regression_weights - np.min(fingerprint_regression_weights)) / (np.max(fingerprint_regression_weights) - np.min(fingerprint_regression_weights)) - 1
+            min_val = np.min(fingerprint_regression_weights)
+            max_val = np.max(fingerprint_regression_weights)
+            fingerprint_regression_weights = 2 * (fingerprint_regression_weights - min_val) / (max_val - min_val) - 1
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))

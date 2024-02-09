@@ -53,12 +53,14 @@ def apply_attack(s=100, t=0.1):
             os.chdir(method)
             fingerprint_peak = determine_peak_fingerprint(method)
             # scale F_p to [0,1]
-            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (np.max(fingerprint_peak) - np.min(fingerprint_peak))
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
+                        np.max(fingerprint_peak) - np.min(fingerprint_peak))
             # set values under threshold t to zero
             fingerprint_peak[fingerprint_peak < t] = 0
             fingerprint_peak *= s
             # scale F_p again to [0,1]
-            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (np.max(fingerprint_peak) - np.min(fingerprint_peak))
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
+                        np.max(fingerprint_peak) - np.min(fingerprint_peak))
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))

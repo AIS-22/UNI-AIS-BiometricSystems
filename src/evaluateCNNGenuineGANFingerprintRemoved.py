@@ -71,7 +71,7 @@ def main():
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "SCUT", '008'),
     ]
-    ganRemovalOptions = [
+    gan_removal_options = [
         "bar",
         "mean",
         "peak"
@@ -96,17 +96,17 @@ def main():
 
         model.load_model("models/" + dataset_name + "/" + model_name)
 
-        for ganRemovalOption in ganRemovalOptions:
+        for gan_removal_option in gan_removal_options:
             data_loader = GanFingerprintRemovedDataLoader()
 
             dataset = data_loader.load_data(use_image_types=model_trained_types,
-                                            dataset_name=dataset_name + '/val_' + ganRemovalOption, folder=folder)
+                                            dataset_name=dataset_name + '/val_' + gan_removal_option, folder=folder)
 
             model.evaluate(dataset)
             model.save_val_accuracy(f"""{dataset_name}_{folder}_{'_'.join(
-                e.value for e in model_trained_types)}_{ganRemovalOption}""")
+                e.value for e in model_trained_types)}_{gan_removal_option}""")
             model.save_val_confusion_matrix(f"""{dataset_name}_{folder}_{'_'.join(
-                e.value for e in model_trained_types)}_{ganRemovalOption}""")
+                e.value for e in model_trained_types)}_{gan_removal_option}""")
 
 
 if __name__ == '__main__':
