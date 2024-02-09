@@ -15,33 +15,31 @@ def print_accuracy(dataset_name):
 
 
 def plot_confusion_matrix():
-    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
     # i have 4 dataset names and wan to get a list where each dataset is combined with each other
     # so i get a list of 16 elements
-    for model_ds in datasets:
-        for eval_ds in datasets:
-            for filename in os.listdir(f'results/mixed/m_{model_ds}_e_{eval_ds}'):
-                if 'conf_matrix' in filename and 'ganSeperator_resized' in filename and '.csv' in filename:
-                    cm = pd.read_csv(
-                        f"results/mixed/m_{model_ds}_e_{eval_ds}/"
-                        f"conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv",
-                        index_col=0,
-                        header=0,
-                        sep=',',
-                        quotechar='"')
-                    plt.figure(figsize=(15, 10))
-                    sn.set(font_scale=1.4)
-                    sn.heatmap(cm,
-                               annot=True,
-                               cmap='Blues',
-                               fmt=".0f",
-                               annot_kws={'fontsize': 20})
-                    plt.xticks(rotation=45)
-                    plt.savefig(
-                        f'plots/mixed/ganSeperator/cm_resized_model_{model_ds}_eval_{eval_ds}_ganSeperator.png')
-                    print('Confusion Matrix Plot saved as: ' +
-                          f'plots/mixed/ganSeperator/cm_resized_model_{model_ds}_eval_{eval_ds}_ganSeperator.png')
-                    plt.close()
+    for filename in os.listdir('results/mixed/ganSeperator'):
+        if 'conf_matrix' in filename and 'ganSeperator_resized' in filename and '.csv' in filename:
+            cm = pd.read_csv(
+                f"results/mixed/ganSeperator/{filename}",
+                index_col=0,
+                header=0,
+                sep=',',
+                quotechar='"')
+            plt.figure(figsize=(15, 10))
+            sn.set(font_scale=1.4)
+            sn.heatmap(cm,
+                       annot=True,
+                       cmap='Blues',
+                       fmt=".0f",
+                       annot_kws={'fontsize': 20})
+            plt.xticks(rotation=45)
+            plt.savefig(
+                f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
+                f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
+            print('Confusion Matrix Plot saved as: ' +
+                  f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
+                  f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
+            plt.close()
 
 
 def plot_loss_results(dataset_name):

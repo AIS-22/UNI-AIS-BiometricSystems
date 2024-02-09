@@ -35,10 +35,10 @@ def structure_plus_dataset():
         if os.path.isdir(db_class):
             os.chdir(db_class)
             for variant in os.listdir("."):
-                if os.path.isdir(variant) and "synthethic" in db_class and variant not in ["003", "004"]:
+                if os.path.isdir(variant) and "synthethic" in db_class and variant not in ["003", "004", "005", "006"]:
                     shutil.rmtree(variant)
             os.chdir("..")
-    print("All variants except 003 and 004 deleted")
+    print("All variants except 003, 004, 005 and 006 deleted")
 
     # Move images to variant folder
     for db_class in os.listdir("."):

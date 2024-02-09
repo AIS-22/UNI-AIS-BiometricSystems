@@ -17,17 +17,33 @@ def main():
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '004'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '005'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '006'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '003'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '004'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '005'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '006'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '003'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '004'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '005'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '006'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '003'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '004'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '005'),
+        ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
+         [VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '006'),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
          [VeinImageType.GENUINE, VeinImageType.SPOOFED], "PROTECT", ''),
         ([VeinImageType.GENUINE, VeinImageType.SPOOFED],
@@ -92,7 +108,7 @@ def main():
         model.load_model("models/" + dataset_name + "/" + model_name)
         data_loader = CustomDataLoader()
 
-        s_dataset, dataset = data_loader.load_data(
+        _, dataset = data_loader.load_data(
             use_image_types=eval_types, dataset_name=dataset_name + '/val', folder=folder)
 
         model.evaluate(dataset)

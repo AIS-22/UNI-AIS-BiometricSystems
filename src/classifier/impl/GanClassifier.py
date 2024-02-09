@@ -139,7 +139,7 @@ class GanClassifier(AbstractClassifier):
         total = 0
         y_pred = []
         y_true = []
-        val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
+        val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=False)
 
         with torch.no_grad():
             for images, labels in val_loader:
@@ -164,7 +164,6 @@ class GanClassifier(AbstractClassifier):
         print(f'F1-score: {f1_score:.4f}')
 
         self.accuracy = accuracy
-        self.confusion_matrix = confusion_matrix
         self.df_cm = df_cm
 
     def save_model(self):
