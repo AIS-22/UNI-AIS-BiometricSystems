@@ -7,6 +7,7 @@ from torchvision.transforms import transforms
 
 from VeinImageType import VeinImageType
 from data_loader.AbstractDataLoader import AbstractDataLoader
+from CustomDataset import CustomDataset
 
 
 class CustomDataLoader(AbstractDataLoader):
@@ -45,5 +46,6 @@ class CustomDataLoader(AbstractDataLoader):
         random.shuffle(all_indexes)
 
         # Get filtered dataset
-        dataset = Subset(full_dataset, all_indexes)
-        return dataset
+        sub_dataset = Subset(full_dataset, all_indexes)
+        dataset = CustomDataset(full_dataset, all_indexes)
+        return sub_dataset, dataset

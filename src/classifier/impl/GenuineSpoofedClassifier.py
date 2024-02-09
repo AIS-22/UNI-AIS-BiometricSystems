@@ -132,7 +132,7 @@ class ResnetClassifier(AbstractClassifier):
 
         self.validation_loss.append(losses)
 
-    def evaluate(self, val_set):
+    def evaluate(self, val_set, train_set):
         self.model.to(self.device)
         self.model.eval()
         correct = 0

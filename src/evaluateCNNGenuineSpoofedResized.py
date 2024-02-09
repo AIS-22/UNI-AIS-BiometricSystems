@@ -68,11 +68,13 @@ def main():
             data_loader = ResizedDataLoader()
             dataset = data_loader.load_data(use_image_types=eval_types, dataset_name=f"{eval_ds}/val",
                                             folder=eval_ds_folder)
+            m_dataset = data_loader.load_data(use_image_types=model_types, dataset_name=f"{model_ds}/val",
+                                              folder=model_ds_folder)
             print(f"Dataset: {dataset}")
 
             model.load_model(f"models/{model_ds}/{model_name}", dataset)
 
-            model.evaluate(dataset)
+            model.evaluate(dataset, m_dataset)
             model.save_val_accuracy(eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types)
             model.save_val_confusion_matrix(eval_ds, eval_ds_folder, eval_types, model_ds, model_ds_folder, model_types)
 

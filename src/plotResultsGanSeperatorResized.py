@@ -23,8 +23,8 @@ def plot_confusion_matrix():
             for filename in os.listdir(f'results/mixed/m_{model_ds}_e_{eval_ds}'):
                 if 'conf_matrix' in filename and 'ganSeperator_resized' in filename and '.csv' in filename:
                     cm = pd.read_csv(
-                        f"""results/mixed/m_{model_ds}_e_{eval_ds}/
-                        conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""",
+                        f"results/mixed/m_{model_ds}_e_{eval_ds}/"
+                        f"conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv",
                         index_col=0,
                         header=0,
                         sep=',',

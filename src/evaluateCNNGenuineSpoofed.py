@@ -92,7 +92,8 @@ def main():
         model.load_model("models/" + dataset_name + "/" + model_name)
         data_loader = CustomDataLoader()
 
-        dataset = data_loader.load_data(use_image_types=eval_types, dataset_name=dataset_name + '/val', folder=folder)
+        s_dataset, dataset = data_loader.load_data(
+            use_image_types=eval_types, dataset_name=dataset_name + '/val', folder=folder)
 
         model.evaluate(dataset)
         model.save_val_accuracy()

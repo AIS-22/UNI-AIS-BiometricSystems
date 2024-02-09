@@ -15,20 +15,25 @@ def print_accuracy(dataset_name):
 
 
 def plot_confusion_matrix(dataset_name):
-    for filename in os.listdir(f'results/{dataset_name}'):
-        if 'conf_matrix' in filename:
-            file = filename.split('.')[0]
-            cm = pd.read_csv(f'results/mixed/{filename}')
-            plt.figure(figsize=(15, 10))
-            sn.set(font_scale=1.4)
-            sn.heatmap(cm, vmin=0, vmax=np.max(cm) + 1,
-                       annot=True,
-                       cmap='Blues',
-                       fmt=".0f",
-                       annot_kws={'fontsize': 20})
-            plt.xticks(rotation=45)
-            plt.savefig(f'plots/{dataset_name}/{file}.png')
-            plt.close()
+    datasets = ['PLUS', 'PROTECT', 'IDIAP', 'SCUT']
+    for model_ds in datasets:
+        for eval_ds in datasets:
+            for filename in os.listdir(f'results/mixed/m_{model_ds}_e_{eval_ds}'):
+                if 'conf_matrix' in filename:
+                    file = filename.split('.')[0]
+                    cm = pd.read_csv(f'results/mixed/m_{model_ds}_e_{eval_ds}/{file}.csv',
+                                     index_col=0, header=0, sep=',')
+                    plt.figure(figsize=(15, 10))
+                    sn.set(font_scale=1.4)
+                    sn.heatmap(cm,
+                               annot=True,
+                               cmap='Blues',
+                               fmt=".0f",
+                               annot_kws={'fontsize': 20})
+                    plt.xticks(rotation=45)
+                    plt.savefig(f'plots/mixed/m_{model_ds}_e_{eval_ds}/{file}.png')
+                    print('Confusion Matrix Plot saved as: ' + f'plots/mixed/m_{model_ds}_e_{eval_ds}/{file}.png')
+                    plt.close()
 
 
 def plot_loss_results(dataset_name):

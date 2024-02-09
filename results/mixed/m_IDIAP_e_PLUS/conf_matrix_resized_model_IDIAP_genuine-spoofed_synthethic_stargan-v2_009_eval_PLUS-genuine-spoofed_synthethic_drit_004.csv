@@ -1,3 +1,3 @@
-,genuine,spoofed_synthethic_drit_004
-genuine,<function confusion_matrix at 0x167a8c7c0>,<function confusion_matrix at 0x167a8c7c0>
-spoofed_synthethic_drit_004,<function confusion_matrix at 0x167a8c7c0>,<function confusion_matrix at 0x167a8c7c0>
+,genuine,spoofed
+genuine,66,0
+spoofed_synthethic_drit_004,65,1
