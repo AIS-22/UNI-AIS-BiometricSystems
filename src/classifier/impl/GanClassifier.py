@@ -378,8 +378,8 @@ class GanClassifierResized(AbstractClassifier):
         if not os.path.exists("results/mixed/ganSeperator/"):
             os.makedirs("results/mixed/ganSeperator/")
         np.save(
-            f"""results/mixed/ganSeperator/
-            accuracy_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.npy""",
+            f"results/mixed/ganSeperator/"
+            f"accuracy_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.npy",
             self.accuracy)
         print('Accuracy saved')
 
@@ -387,6 +387,6 @@ class GanClassifierResized(AbstractClassifier):
         if not os.path.exists("results/mixed/ganSeperator/"):
             os.makedirs("results/mixed/ganSeperator/")
         self.df_cm.to_csv(
-            f"""results/mixed/ganSeperator/
-            conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv""")
+            f"results/mixed/ganSeperator/"
+            f"conf_matrix_ganSeperator_resized_model_{model_ds}_eval_{eval_ds}.csv")
         print('Confusion matrix saved')

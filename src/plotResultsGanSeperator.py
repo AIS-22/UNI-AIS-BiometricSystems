@@ -19,8 +19,8 @@ def plot_confusion_matrix(dataset_name):
         if 'conf_matrix' in filename and '.csv' in filename and 'ganSeperator' in filename:
             file = filename.split('.')[0]
 
-            conf_matrix = pd.read_csv(f"""results/{dataset_name}/
-                                      conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv""",
+            conf_matrix = pd.read_csv(f"results/{dataset_name}/"
+                                      f"conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv",
                                       index_col=0, header=0, sep=',', quotechar='"')
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)
