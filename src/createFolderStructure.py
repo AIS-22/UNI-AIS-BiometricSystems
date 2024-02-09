@@ -285,10 +285,34 @@ def preprocess_scut_dataset():
     print("Preprocessed SCUT dataset")
 
 
+def resize_data_to_same_size(width=580, height=280):
+    datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
+    # copy the data folder and rename it to data_rs
+    if not os.path.isdir("data_rs"):
+        shutil.copytree("data", "data_rs")
+    for db in datasets:
+        # go trough all images and resize them to the same size
+        for folder in os.listdir(os.path.join("data_rs", db, "train")):
+            for image in os.listdir(os.path.join("data_rs", db, "train", folder)):
+                image_path = os.path.join("data_rs", db, "train", folder, image)
+                image = cv2.imread(image_path)
+                if image is not None:
+                    image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LANCZOS4)
+                    cv2.imwrite(image_path, image)
+        for folder in os.listdir(os.path.join("data_rs", db, "val")):
+            for image in os.listdir(os.path.join("data_rs", db, "val", folder)):
+                image_path = os.path.join("data_rs", db, "val", folder, image)
+                image = cv2.imread(image_path)
+                if image is not None:
+                    image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LANCZOS4)
+                    cv2.imwrite(image_path, image)
+        print(f"Resized {db} dataset to {width}x{height}")
+
+
 def resize_data():
     datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
     for db in datasets:
-        # get all folders in IDIAP train and validation folder and write them in a list
+        # get all folders in train and validation folder and write them in a list
         train_folders = []
         validation_folders = []
         for _, dirs, _ in os.walk(f"data/{db}/train"):
@@ -343,7 +367,8 @@ def main():
     train_test_split()
     os.chdir("..")
     preprocess_scut_dataset()
-    resize_data()
+    resize_data_to_same_size()  # create data_rs folder and resize data so all datasets match
+    resize_data()  # resize data so one dataset matches internaly
 
 
 if __name__ == '__main__':
