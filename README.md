@@ -24,6 +24,17 @@ The gan seperator is used to seperate the different spoofed variants. The naming
     e.g. conf_matrix_cnnParams_resnet18_PLUS_ganSeperator.png
     Here we used the PLUS dataset to seperate the gans from each other.
 
+**Gan Fingerprint Removal**
+
+Here the intra dataset was used to evaluate the performance of the model on the same dataset but with the fingerprint removed. The naming convention is as follows:
+
+    conf_matrix_{DatasetName}_{FoldNumber}_{genuine}_{spoofed variant used}_{removalMethod}.png
+
+    For removalMethod: we used the following methods: mean, peak, bar
+
+    e.g. conf_matrix_PLUS_003_genuine_spoofed_synthetic_cyclegan_mean.png
+    Here we used the PLUS dataset, folder 003, and the genuine vs the synthetic cyclegan spoofed variant. but evaluated with genuine vs synthetic cyclegan with the mean fingerprint removed.
+
 ### Inter Dataset Results
 In the case where we resized the images all to the same size we used the following naming convention. First we split apart the different evaluation combinations into folders. This gives us the folling folder convention:
 
