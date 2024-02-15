@@ -6,7 +6,7 @@
 Explain Border Conditions and first Experiments (e.g. ResNet18, Fingerprints, Resizing, Different Datasets, Different GANs, Different Fingerprint Removal Methods, Different Evaluation Combinations, Different Models, Different Folds)
 - Finger print removal
     - mean
-        - ![](plots/GAN_removal/attack_means_PLUS_drit_003.png)
+        - ![](plots/GAN_removal/attack_mean_PLUS_drit_003.png)
     - peak
         - ![](plots/GAN_removal/attack_peaks_PLUS_drit_003.png)
     - bar
