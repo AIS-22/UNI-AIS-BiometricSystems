@@ -16,16 +16,16 @@ Explain Border Conditions and first Experiments (e.g. ResNet18, Fingerprints, Re
 
 ### 2. Hypothesis:
 - Intra Dataset
-    - A model is able to distinguish between genuine and spoofed images (genuine vs spoofed)
-    - A model is able to distinguish between different spoofed variants (gan seperator)
-    - The models learn the fingerprints of the different gans (genuinie vs synthetic)
-    - The models are not able to distinguish between genuine and spoofed images when the fingerprint is removed (genuinie vs synthetic with removed fingerprint)
-    - A model is able to distinguish between genuine and spoofed images when resized in the same dataset (resized genuine vs spoofed)
-    - A model is able to distinguish between different spoofed variants when resized in the same dataset (gan seperator)
+    - A model trained on geniuine and spoofed is able to distinguish between genuine and spoofed images (genuine vs spoofed)
+    - A model trained on the different gans and settings is able to distinguish between different spoofed variants (gan seperator)
+    - The models trained on synthetic images learn the fingerprints of the different gans (genuinie vs synthetic eval genuine spoofed)
+    - The models trained on genuine and synthetic images are not able to distinguish between genuine and spoofed images when the fingerprint is removed (genuinie vs synthetic with removed fingerprint)
+    - A model trained on genuine and spoofed is able to distinguish between genuine and spoofed images when resized in the same dataset (resized genuine vs spoofed)
+    - A model trained on different gans is able to distinguish between different spoofed variants when resized in the same dataset (gan seperator)
 - Inter Dataset (images resized)
-    - A model is able to distinguish between genuine and spoofed images when resized in different datasets (resized genuine vs spoofed)
-    - A model is able to distinguish between different spoofed variants when resized in different dataset (gan seperator)
-    - A model is able to distinguish between genuine and the same GAN variant over different datasets
+    - A model trained on one DS with genuine and spoofed is able to distinguish between genuine and spoofed images when resized in different datasets (resized genuine vs spoofed)
+    - A model trained on one DS seperating differnt gans is able to distinguish between different spoofed variants when resized in different dataset (gan seperator)
+    - A model traied ongenuine and synthetic is able to distinguish between genuine and the same GAN variant over different datasets
 
 ### 3. Visual Comparinson of DS
 
