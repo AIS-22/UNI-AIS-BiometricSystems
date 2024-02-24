@@ -46,7 +46,7 @@ The datasets themselves exhibit variations between genuine, spoofed, and manipul
         - PROTECT ![image](plots/PROTECT/conf_matrix_cnnParams_resnet18_PROTECT_ganSeperator.png)
         - SCUT ![image](plots/SCUT/conf_matrix_cnnParams_resnet18_SCUT_ganSeperator.png)
     - The models learn the fingerprints of the different gans (genuinie vs synthetic)
-        - We can conclued this is generally not the case. The models are not able to distinguish between genuine and spoofed images when the fingerprint is removed (genuinie vs synthetic with removed fingerprint)
+        - We can conclued this is generally not the case. The models are able to distinguish between genuine and spoofed images even when the fingerprint is removed (genuinie vs synthetic with removed fingerprint)
         - However there are exceptions.
             - PLUS drit 003 peak removal ![](plots/PLUS/conf_matrix_PLUS_003_genuine_spoofed_synthethic_drit_peak.png)
             - PLUS drit 004 mean removed ![](plots/PLUS/conf_matrix_PLUS_004_genuine_spoofed_synthethic_drit_mean.png)
