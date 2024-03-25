@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import glob
 
-datasets = ["PLUS", "SCUT", "PROTECT"]
+datasets = ["IDIAP"]
 
 
 def copy_images():
@@ -36,11 +36,13 @@ def apply_attack(s=20):
             os.chdir(method)
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
                 dct_result = cv2.dct(np.float32(image))
                 # set the last s rows and columns to zero
                 dct_result[-s:, :] = 0
                 dct_result[:, -s:] = 0
                 reconstructed_image = cv2.idct(dct_result)
+                reconstructed_image = cv2.resize(reconstructed_image, (665, 250), interpolation=cv2.INTER_LANCZOS4)
                 cv2.imwrite(img, reconstructed_image)
             os.chdir("..")
 
@@ -61,11 +63,13 @@ def apply_attack_train(s=20):
             os.chdir(method)
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
                 dct_result = cv2.dct(np.float32(image))
                 # set the last s rows and columns to zero
                 dct_result[-s:, :] = 0
                 dct_result[:, -s:] = 0
                 reconstructed_image = cv2.idct(dct_result)
+                reconstructed_image = cv2.resize(reconstructed_image, (665, 250), interpolation=cv2.INTER_LANCZOS4)
                 cv2.imwrite(img, reconstructed_image)
             os.chdir("..")
 

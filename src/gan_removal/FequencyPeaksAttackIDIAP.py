@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import glob
 
-datasets = ["PLUS", "SCUT", "PROTECT"]
+datasets = ["IDIAP"]
 
 
 def copy_images():
@@ -28,18 +28,26 @@ def determine_peak_fingerprint(folder):
     filenames_gan = glob.glob(f'../../train/{folder}/*')
 
     # create mean of dct coeffiecents of genuine images
-    mean_dct_genuine = np.zeros(cv2.imread(filenames_genuine[0], cv2.IMREAD_GRAYSCALE).shape)
+    img = cv2.imread(filenames_genuine[0], cv2.IMREAD_GRAYSCALE)
+    img = cv2.resize(img, (666, 250), interpolation=cv2.INTER_LANCZOS4)
+    mean_dct_genuine = np.zeros(img.shape)
     for filename in filenames_genuine:
         image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+        # rezie the image to 666x250
+        image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
         # add 1e-10 to avoid division by zero
         mean_dct_genuine += np.log(np.abs(cv2.dct(np.float32(image))) + 1e-10)
 
     mean_dct_genuine /= len(filenames_genuine)
 
     # create mean of dct coefficients of gan images
-    mean_dct_gan = np.zeros(cv2.imread(filenames_gan[0], cv2.IMREAD_GRAYSCALE).shape)
+    img = cv2.imread(filenames_gan[0], cv2.IMREAD_GRAYSCALE)
+    img = cv2.resize(img, (666, 250), interpolation=cv2.INTER_LANCZOS4)
+    mean_dct_gan = np.zeros(img.shape)
     for filename in filenames_gan:
         image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+        # rezie the image to 666x250
+        image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
         # add 1e-10 to avoid division by zero
         mean_dct_gan += np.log(np.abs(cv2.dct(np.float32(image))) + 1e-10)
 
@@ -73,10 +81,14 @@ def apply_attack(s=100, t=0.1):
                 np.max(fingerprint_peak) - np.min(fingerprint_peak))
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                # rezize the image to 666x250
+                image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
                 dct_result = cv2.dct(np.float32(image))
                 modified_coeffs = dct_result * (1 - fingerprint_peak)
                 # store the new image in removal folder
                 reconstructed_image = cv2.idct(modified_coeffs)
+                # resize the image back to 665x250
+                reconstructed_image = cv2.resize(reconstructed_image, (665, 250), interpolation=cv2.INTER_LANCZOS4)
                 cv2.imwrite(img, reconstructed_image)
             os.chdir("..")
 
@@ -107,10 +119,14 @@ def apply_attack_train(s=100, t=0.1):
                 np.max(fingerprint_peak) - np.min(fingerprint_peak))
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                # rezize the image to 666x250
+                image = cv2.resize(image, (666, 250), interpolation=cv2.INTER_LANCZOS4)
                 dct_result = cv2.dct(np.float32(image))
                 modified_coeffs = dct_result * (1 - fingerprint_peak)
                 # store the new image in removal folder
                 reconstructed_image = cv2.idct(modified_coeffs)
+                # resize the image back to 665x250
+                reconstructed_image = cv2.resize(reconstructed_image, (665, 250), interpolation=cv2.INTER_LANCZOS4)
                 cv2.imwrite(img, reconstructed_image)
             os.chdir("..")
 
