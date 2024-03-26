@@ -174,7 +174,7 @@ def plotTrainWithEvalWithRemoval():
                     ax[options_gan_removal.index(gan_rem_train)][options_gan_removal.index(gan_rem_eval)].set_title(
                         f"Train: {gan_rem_train} Eval: {gan_rem_eval}")
             plt.savefig(f"plots/mixed/fpRem/m_{model_ds}_e_{eval_ds}/"
-                        f"fconfusion_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}"
+                        f"confusion_matrix_resized_model_{model_ds}_{'-'.join([e.value for e in model_types])}"
                         f"_{model_ds_folder}_eval_{eval_ds}-{'-'.join([e.value for e in eval_types])}_{eval_ds_folder}"
                         f"_m_rem_e_rem.png")
             plt.close()
