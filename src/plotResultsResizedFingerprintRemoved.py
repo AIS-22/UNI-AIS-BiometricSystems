@@ -54,7 +54,7 @@ options_gan_removal = [
 ]
 
 
-def plotTrainWithoutEvalWithRemoval():
+def plot_train_without_eval_with_removal():
 
     for model_types, model_ds, model_ds_folder in options:
         for eval_types, eval_ds, eval_ds_folder in options:
@@ -96,7 +96,7 @@ def plotTrainWithoutEvalWithRemoval():
             plt.close()
 
 
-def plotTrainWithEvalWithRemoval():
+def plot_train_with_eval_with_removal():
     # create a subplots
     for model_types, model_ds, model_ds_folder in options:
         for eval_types, eval_ds, eval_ds_folder in options:
@@ -141,8 +141,8 @@ def plotTrainWithEvalWithRemoval():
 
 
 def main():
-    plotTrainWithoutEvalWithRemoval()
-    plotTrainWithEvalWithRemoval()
+    plot_train_without_eval_with_removal()
+    plot_train_with_eval_with_removal()
 
 
 if __name__ == "__main__":
