@@ -7,46 +7,6 @@ from torchvision import models
 from torch import nn
 import os
 
-options_model = [
-    # ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "PLUS", ''),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '003'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '004'),
-    ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '005'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '006'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '003'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '004'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '005'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PLUS", '006'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '003'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '004'),
-    ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '005'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PLUS", '006'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '003'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '004'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '005'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PLUS", '006'),
-    # ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "PROTECT", ''),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PROTECT", '010'),
-    ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PROTECT", '110'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "PROTECT", '010'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "PROTECT", '010'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PROTECT", '010'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "PROTECT", '110'),
-    # ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "IDIAP", ''),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "IDIAP", '009'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "IDIAP", '009'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "IDIAP", '009'),
-    ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "IDIAP", '009'),
-    # ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "SCUT", ''),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "SCUT", '007'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "SCUT", '008'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "SCUT", '007'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DIST], "SCUT", '008'),
-    ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "SCUT", '007'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_DRIT], "SCUT", '008'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "SCUT", '007'),
-    # ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_STAR], "SCUT", '008'),
-]
 options = [
     ([VeinImageType.GENUINE, VeinImageType.SPOOFED], "PLUS", ''),
     ([VeinImageType.GENUINE, VeinImageType.SYNTHETIC_CYCLE], "PLUS", '003'),
@@ -96,7 +56,7 @@ options_gan_removal = [
 
 def plotTrainWithoutEvalWithRemoval():
 
-    for model_types, model_ds, model_ds_folder in options_model:
+    for model_types, model_ds, model_ds_folder in options:
         for eval_types, eval_ds, eval_ds_folder in options:
             # create a subplots
             fig, ax = plt.subplots(1, 3, figsize=(15, 5))
