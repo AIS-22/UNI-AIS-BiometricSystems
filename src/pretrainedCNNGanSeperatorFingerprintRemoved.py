@@ -51,7 +51,8 @@ def main():
                   str(model_trained_types[1]) + " with " + gan_removal_option + " gan removal")
 
             dataset = data_loader.load_data(use_image_types=model_trained_types,
-                                            dataset_name=dataset_name + '/train_' + gan_removal_option, transform=preprocess)
+                                            dataset_name=dataset_name + '/train_' + gan_removal_option,
+                                            transform=preprocess)
             print(len(dataset))
             model = GanClassifier(num_epochs=5,
                                   learning_rate=0.00001,

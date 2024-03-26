@@ -98,7 +98,7 @@ def plotTrainWithoutEvalWithRemoval():
 
 def plotTrainWithEvalWithRemoval():
     # create a subplots
-    for model_types, model_ds, model_ds_folder in options_model:
+    for model_types, model_ds, model_ds_folder in options:
         for eval_types, eval_ds, eval_ds_folder in options:
             fig, ax = plt.subplots(3, 3, figsize=(15, 15))
             # for gan_rem_train in options:

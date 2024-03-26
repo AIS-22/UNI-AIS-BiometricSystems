@@ -33,24 +33,8 @@ def plot_confusion_matrix(dataset_name):
     else:
         for filename in os.listdir('results/' + dataset_name):
             if 'conf_matrix' in filename and '.npy' in filename:
-                x = 1
-                # file = filename.split('.')[0]
-                # categories = ['genuine', 'spoofed']
-                # load dic from file
-                # conf_matrix = np.load('results/' + dataset_name + '/' + filename, allow_pickle=True)
-                # plt.figure(figsize=(15, 10))
-                # sn.set(font_scale=1.4)
-                # sn.heatmap(conf_matrix, vmin=0, vmax=np.max(conf_matrix) + 1,
-                #           xticklabels=categories,
-                #           yticklabels=categories,
-                #           annot=True,
-                #           cmap='Blues',
-                #           fmt=".0f",
-                #           annot_kws={'fontsize': 20})
-                # plt.xticks(rotation=45)
-                # plt.savefig('plots/' + dataset_name + '/' + file + '.png')
-                # print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
-                # plt.close()
+                # do nothing
+                continue
             elif 'conf_matrix' in filename and '.csv' in filename:
                 file = filename.split('.')[0]
                 cm = pd.read_csv(f'results/{dataset_name}/{filename}', index_col=0, header=0, sep=',')

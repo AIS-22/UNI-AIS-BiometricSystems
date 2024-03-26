@@ -59,7 +59,9 @@ def main():
 
             data_loader = GanDataLoader()
             dataset = data_loader.load_data(
-                use_image_types=eval_types, dataset_name=f'{dataset_name}/val_{gan_removal_option}', transform=preprocess)
+                use_image_types=eval_types,
+                dataset_name=f'{dataset_name}/val_{gan_removal_option}',
+                transform=preprocess)
 
             model.load_model(f"models/{dataset_name}/{model_name}", dataset)
 

@@ -65,7 +65,8 @@ def main():
         for gan_removal_option in gan_removal_options:
             print("Training model for " + dataset_name + " with " + folder +
                   " folder with " + gan_removal_option + " gan removal")
-            dataset = data_loader.load_data(use_image_types=model_trained_types, dataset_name=dataset_name + '/train_' + gan_removal_option,
+            dataset = data_loader.load_data(use_image_types=model_trained_types,
+                                            dataset_name=dataset_name + '/train_' + gan_removal_option,
                                             folder=folder)
             model = SpoofedResizedClassifier(num_epochs=10,
                                              learning_rate=0.001,

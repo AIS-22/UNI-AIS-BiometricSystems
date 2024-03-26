@@ -110,8 +110,8 @@ def main():
                 if model_ds_folder == '':
                     model_name = f'resnet18_resized_{model_ds}_' + '_'.join(e.value for e in model_types)
                 else:
-                    model_name = f'resnet18_resized_{model_ds}_{
-                        model_ds_folder}_' + '_'.join(e.value for e in model_types)
+                    model_name = f'resnet18_resized_{model_ds}_'
+                    f'{model_ds_folder}_' + '_'.join(e.value for e in model_types)
                 if gan_removal_option != 'withFP':
                     model_name = f'{model_name}_{gan_removal_option}'
 
@@ -130,7 +130,8 @@ def main():
                                                  num_inputs_nodes=(580, 280))
 
                 data_loader = ResizedDataLoader()
-                dataset = data_loader.load_data(use_image_types=eval_types, dataset_name=f"{eval_ds}/val_{gan_removal_option}",
+                dataset = data_loader.load_data(use_image_types=eval_types,
+                                                dataset_name=f"{eval_ds}/val_{gan_removal_option}",
                                                 folder=eval_ds_folder)
                 print(f"Dataset: {dataset}")
 
