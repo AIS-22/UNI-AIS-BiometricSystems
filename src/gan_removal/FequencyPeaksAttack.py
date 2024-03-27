@@ -4,13 +4,21 @@ import cv2
 import numpy as np
 import glob
 
-datasets = ["PLUS", "SCUT", "PROTECT", "IDIAP"]
+datasets = ["PLUS", "SCUT", "PROTECT"]
 
 
 def copy_images():
     for ds in datasets:
         os.chdir(ds)
         shutil.copytree(src="val", dst="val_peak", dirs_exist_ok=True)
+        print(f"Copied {ds}")
+        os.chdir("..")
+
+
+def copy_images_train():
+    for ds in datasets:
+        os.chdir(ds)
+        shutil.copytree(src="train", dst="train_peak", dirs_exist_ok=True)
         print(f"Copied {ds}")
         os.chdir("..")
 
@@ -49,18 +57,54 @@ def apply_attack(s=100, t=0.1):
         directories = os.listdir()
         directories.remove("genuine")
         directories.remove("spoofed")
+        if ".DS_Store" in directories:
+            directories.remove(".DS_Store")
         for method in directories:
             os.chdir(method)
             fingerprint_peak = determine_peak_fingerprint(method)
             # scale F_p to [0,1]
             fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
-                        np.max(fingerprint_peak) - np.min(fingerprint_peak))
+                np.max(fingerprint_peak) - np.min(fingerprint_peak))
             # set values under threshold t to zero
             fingerprint_peak[fingerprint_peak < t] = 0
             fingerprint_peak *= s
             # scale F_p again to [0,1]
             fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
-                        np.max(fingerprint_peak) - np.min(fingerprint_peak))
+                np.max(fingerprint_peak) - np.min(fingerprint_peak))
+            for img in glob.glob("*"):
+                image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                dct_result = cv2.dct(np.float32(image))
+                modified_coeffs = dct_result * (1 - fingerprint_peak)
+                # store the new image in removal folder
+                reconstructed_image = cv2.idct(modified_coeffs)
+                cv2.imwrite(img, reconstructed_image)
+            os.chdir("..")
+
+        print(f"Finished {ds}")
+        os.chdir("../..")
+
+
+def apply_attack_train(s=100, t=0.1):
+    for ds in datasets:
+        os.chdir(f"{ds}/train_peak")
+        # remove genuine and spoofed from removing fingerprints
+        directories = os.listdir()
+        directories.remove("genuine")
+        directories.remove("spoofed")
+        if ".DS_Store" in directories:
+            directories.remove(".DS_Store")
+        for method in directories:
+            os.chdir(method)
+            fingerprint_peak = determine_peak_fingerprint(method)
+            # scale F_p to [0,1]
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
+                np.max(fingerprint_peak) - np.min(fingerprint_peak))
+            # set values under threshold t to zero
+            fingerprint_peak[fingerprint_peak < t] = 0
+            fingerprint_peak *= s
+            # scale F_p again to [0,1]
+            fingerprint_peak = (fingerprint_peak - np.min(fingerprint_peak)) / (
+                np.max(fingerprint_peak) - np.min(fingerprint_peak))
             for img in glob.glob("*"):
                 image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
                 dct_result = cv2.dct(np.float32(image))
@@ -78,3 +122,5 @@ if __name__ == '__main__':
     os.chdir("data")
     copy_images()
     apply_attack()
+    copy_images_train()
+    apply_attack_train()

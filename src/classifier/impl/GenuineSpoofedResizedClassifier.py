@@ -134,6 +134,7 @@ class SpoofedResizedClassifier(AbstractClassifier):
 
         self.validation_loss.append(losses)
 
+    @torch.no_grad()
     def evaluate(self, val_set):
         self.model.to(self.device)
         self.model.eval()
@@ -182,6 +183,7 @@ class SpoofedResizedClassifier(AbstractClassifier):
         print(f'Number of output nodes: {self.num_output_nodes}')
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
+        print(model_path)
         self.model.load_state_dict(torch.load(model_path))
         self.model.to(self.device)
         print("Model loaded")

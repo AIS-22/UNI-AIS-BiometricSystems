@@ -1,0 +1,7 @@
+,spoofed_synthethic_cyclegan_010,spoofed_synthethic_cyclegan_110,spoofed_synthethic_distancegan_010,spoofed_synthethic_drit_010,spoofed_synthethic_stargan-v2_010,spoofed_synthethic_stargan-v2_110
+spoofed_synthethic_cyclegan_010,8,1,0,0,1,0
+spoofed_synthethic_cyclegan_110,1,9,0,0,0,0
+spoofed_synthethic_distancegan_010,1,1,8,0,0,0
+spoofed_synthethic_drit_010,0,0,0,10,0,0
+spoofed_synthethic_stargan-v2_010,0,0,0,0,9,1
+spoofed_synthethic_stargan-v2_110,0,0,0,0,1,9

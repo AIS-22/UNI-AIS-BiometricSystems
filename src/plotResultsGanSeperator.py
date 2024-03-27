@@ -19,14 +19,16 @@ def plot_confusion_matrix(dataset_name):
         if 'conf_matrix' in filename and '.csv' in filename and 'ganSeperator' in filename:
             file = filename.split('.')[0]
 
-            conf_matrix = pd.read_csv(f"results/{dataset_name}/"
-                                      f"conf_matrix_cnnParams_resnet18_{dataset_name}_ganSeperator.pt.csv",
+            conf_matrix = pd.read_csv(f"results/{dataset_name}/{file}.pt.csv",
                                       index_col=0, header=0, sep=',', quotechar='"')
             plt.figure(figsize=(15, 10))
             sn.set(font_scale=1.4)
             sn.heatmap(conf_matrix, annot=True, cmap='Blues', fmt=".0f", annot_kws={'fontsize': 20})
-            plt.xticks(rotation=90)
-            plt.savefig('plots/' + dataset_name + '/' + file + '.png')
+            plt.xticks(rotation=-45)
+            labels = plt.gca().get_xticklabels()
+            plt.setp(labels, ha='left')
+            plt.tight_layout()
+            plt.savefig('plots/' + dataset_name + '/' + file + '.png', bbox_inches='tight')
             print('Confusion Matrix Plot saved as: ' + 'plots/' + dataset_name + '/' + file + '.png')
             plt.close()
 

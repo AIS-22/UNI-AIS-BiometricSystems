@@ -31,7 +31,7 @@ def plot_confusion_matrix(dataset_name):
                                fmt=".0f",
                                annot_kws={'fontsize': 20})
                     plt.xticks(rotation=45)
-                    plt.savefig(f'plots/mixed/m_{model_ds}_e_{eval_ds}/{file}.png')
+                    plt.savefig(f'plots/mixed/m_{model_ds}_e_{eval_ds}/{file}.png', bbox_inches='tight')
                     print('Confusion Matrix Plot saved as: ' + f'plots/mixed/m_{model_ds}_e_{eval_ds}/{file}.png')
                     plt.close()
 

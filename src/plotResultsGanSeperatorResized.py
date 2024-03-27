@@ -32,10 +32,13 @@ def plot_confusion_matrix():
                        cmap='Blues',
                        fmt=".0f",
                        annot_kws={'fontsize': 20})
-            plt.xticks(rotation=45)
+            plt.xticks(rotation=-45)
+            labels = plt.gca().get_xticklabels()
+            plt.setp(labels, ha='left')
+            plt.tight_layout()
             plt.savefig(
                 f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
-                f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
+                f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png", bbox_inches='tight')
             print('Confusion Matrix Plot saved as: ' +
                   f"plots/mixed/ganSeperator/cm_resized_model_{filename.split('.')[0].split('_')[-3]}"
                   f"_eval_{filename.split('.')[0].split('_')[-1]}_ganSeperator.png")
